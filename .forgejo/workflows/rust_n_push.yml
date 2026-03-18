@@ -34,9 +34,10 @@ jobs:
           BLAIR_HOST_PWD: ${{ secrets.BLAIR_HOST_PWD }}
         run: rsync -avz --delete --rsh="sshpass -p $BLAIR_HOST_PWD ssh -p $BLAIR_HOST_PORT -o StrictHostKeyChecking=no" static breadly@$BLAIR_HOST:~/blair/
 
-      - name: Restart Blair on the remote server
-        env:
-          BLAIR_HOST: ${{ secrets.BLAIR_HOST }}
-          BLAIR_HOST_PORT: ${{ secrets.BLAIR_HOST_PORT }}
-          BLAIR_HOST_PWD: ${{ secrets.BLAIR_HOST_PWD }}
-        run: ssh $BLAIR_HOST -p $BLAIR_HOST_PORT "printf '%s\n' "$BLAIR_HOST_PWD" | sudo -S systemctl restart breadcat-blair"
+      # Disabling this part until I find out how to do it properly
+      # - name: Restart Blair on the remote server
+      #   env:
+      #     BLAIR_HOST: ${{ secrets.BLAIR_HOST }}
+      #     BLAIR_HOST_PORT: ${{ secrets.BLAIR_HOST_PORT }}
+      #     BLAIR_HOST_PWD: ${{ secrets.BLAIR_HOST_PWD }}
+      #   run: ssh $BLAIR_HOST -p $BLAIR_HOST_PORT "printf '%s\n' "$BLAIR_HOST_PWD" | sudo -S systemctl restart breadcat-blair"
