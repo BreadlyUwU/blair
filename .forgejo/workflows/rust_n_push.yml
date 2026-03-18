@@ -39,4 +39,4 @@ jobs:
           BLAIR_HOST: ${{ secrets.BLAIR_HOST }}
           BLAIR_HOST_PORT: ${{ secrets.BLAIR_HOST_PORT }}
           BLAIR_HOST_PWD: ${{ secrets.BLAIR_HOST_PWD }}
-        run: ssh $BLAIR_HOST:$BLAIR_HOST_PORT "printf '%s\n' "$BLAIR_HOST_PWD" | sudo -S systemctl restart breadcat-blair"
+        run: ssh $BLAIR_HOST -p $BLAIR_HOST_PORT "printf '%s\n' "$BLAIR_HOST_PWD" | sudo -S systemctl restart breadcat-blair"
