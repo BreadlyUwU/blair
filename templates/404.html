@@ -4,7 +4,7 @@
 		<title>There's nothing for you in this place</title>
 	</head>
 
-	<div class="window" style="height:fit-content; margin: auto;">
+	<div class="window" style="max-width:100%; max-height: fit-content; margin: auto;">
 		<div class="w-titlebar">
 			<div class="w-left">
 				<a href="javascript:window.history.back();"><div class="w-btn arrow" title="Back"></div></a>
@@ -16,6 +16,6 @@
 				<div class="w-btn close"></div>
 			</div>
 		</div>
-		<img src="{{ get_url("/static/images/404.gif") }}">
+		<img src="{{ get_url("/static/images/404.gif") }}" style="max-width: inherit;">
 	</div>
 {% endblock %}
