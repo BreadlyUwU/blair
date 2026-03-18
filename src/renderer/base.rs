@@ -30,3 +30,11 @@ pub async fn home() -> impl Responder {
         Err(e) => HttpResponse::InternalServerError().body(crate::renderer::error::render_error(e)),
     }
 }
+
+pub async fn _404() -> impl Responder {
+    let template = Err404Template;
+    match template.render() {
+        Ok(render) => HttpResponse::NotFound().content_type("text/html").body(render),
+        Err(e) => HttpResponse::InternalServerError().body(crate::renderer::error::render_error(e)),
+    }
+}

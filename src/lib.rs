@@ -6,7 +6,7 @@ use actix_web::{
     App, 
     HttpServer, 
     dev::Server, 
-    middleware
+    middleware, web,
 };
 use std::net::TcpListener;
 
@@ -25,6 +25,10 @@ pub fn launch() -> Result<Server, std::io::Error> {
             )
             .service(health::health_check_endpoint)
             .service(renderer::base::home)
+
+            //.Error 404
+            .default_service(web::route().to(renderer::base::_404))
+
     })
     .listen(listener)?
     .run();
