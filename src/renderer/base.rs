@@ -1,4 +1,6 @@
 use crate::config;
+use super::functions;
+use super::functions::StandardBlairFunctions;
 
 use actix_web::{
     HttpResponse, 
@@ -9,23 +11,18 @@ use askama::Template;
 
 #[derive(Template)]
 #[template(path = "home.html")]
-struct BaseTemplate {
-    version: String,
-}
+struct BaseTemplate;
 
-impl BaseTemplate {
-    fn get_url(&self, val: &str) -> String {
-        let base_url = config::Configuration::base_url();
-        return format!("{base_url}{val}");
-    }
-}
+#[derive(Template)]
+#[template(path = "404.html")]
+struct Err404Template;
+
+functions::standard_func_set!(BaseTemplate, Err404Template);
 
 #[get("/")]
 pub async fn home() -> impl Responder {
-    let helloworld = BaseTemplate { 
-        version: String::from(env!("CARGO_PKG_VERSION"))
-    };
-    match helloworld.render() {
+    let template = BaseTemplate;
+    match template.render() {
         Ok(render) => HttpResponse::Ok().content_type("text/html").body(render),
         Err(e) => HttpResponse::InternalServerError().body(crate::renderer::error::render_error(e)),
     }
