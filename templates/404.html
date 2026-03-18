@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+	<head>
+		<title>There's nothing for you in this place</title>
+	</head>
+
+	<div class="window" style="height:fit-content; margin: auto;">
+		<div class="w-titlebar">
+			<div class="w-left">
+				<a href="javascript:window.history.back();"><div class="w-btn arrow" title="Back"></div></a>
+				<div class="w-title"><span>HTML 404 - Not Found</span></div>
+			</div>
+			<div class="w-right">
+				<div class="w-btn minimize"></div>
+				<div class="w-btn maximize"></div>
+				<div class="w-btn close"></div>
+			</div>
+		</div>
+		<img src="static/images/404.gif">
+	</div>
+{% endblock %}

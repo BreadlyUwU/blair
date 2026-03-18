@@ -1,0 +1,164 @@
+@import "global_theming";
+
+#blog-list-item {
+	display: flex;
+	flex-direction: row;
+	box-sizing: content-box;
+	width: auto;
+	min-height: 64px;
+	overflow-y: hidden;
+	background: $background_window;
+
+	a {
+		width: 100%;
+		text-decoration: none;
+	}
+
+	img {
+		height: 64px;
+	}
+
+	#blog-entry {
+		display: flex;
+		flex-direction: row;
+		max-height: min-content;
+	}
+
+	#blog-entry-thumbnail {
+		margin: 0 10px;
+		height: 64px;
+	}
+
+	#blog-entry-info {
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		padding: 5px;
+	}
+
+	#blog-entry-top,
+	#blog-entry-bot {
+		display: flex;
+		flex-direction: row;
+	}
+
+	#blog-entry-title {
+		flex: 1;
+		text-decoration: underline;
+	}
+
+	#blog-entry-date {
+		color: $text_interface;
+		font-weight: bold;
+		flex: 0 1 auto;
+		text-align: right;
+		font-size: 0.8rem;
+	}
+
+	#blog-entry-tags {
+		color: $text_interface;
+		margin-top: auto;
+		font-size: 1rem;
+	}
+
+	#blog-entry-description {
+		color: $text_interface;
+		flex: 1;
+		margin-top: 10px;
+		font-size: 90%;
+	}
+
+	&:nth-child(n+3) {
+		border-top: 2px ridge $background_main;
+	}
+
+	&:hover {
+		background: #FFFFFF20;
+	}
+}
+
+#content-header {
+	display: block;
+	border-bottom: $background_main 4px ridge;
+	padding-top: 5px;
+	padding: 10px 5px;
+	overflow-x: scroll;
+	scrollbar-width: none;
+}
+
+#blog-post-info {
+	text-align: left
+	table {
+		border-spacing: 50px 0;
+	}
+	td, th {
+		padding: 2px 10px;
+	}
+
+}
+
+#content {
+	p {
+		text-align: justify;
+	}
+
+	p code {
+		background-color: #0f1419;
+		padding: 0 4px;
+		font-size: 0.9rem;
+		font-weight: bolder;
+		text-align: left;
+	}
+
+	h1 {
+		text-align: center;
+		font-size: 1.6rem;
+		padding: 2vh 0;
+	}
+
+	h2 {
+		font-size: 1.4rem;
+		padding: 1.5vh 0;
+	}
+
+	pre {
+		padding: 0.5rem;
+		overflow: auto;
+	}
+
+	img {
+		max-width: 40vw;
+		// box-shadow: 12px 12px 2px 1px #0f1419;
+	}
+}
+
+@media (prefers-color-scheme: light) {
+	#blog-list-item {
+		background: $light-background_window;
+		&:nth-child(n+3) {
+			border-top: 2px ridge $light-background_main;
+		}
+		#blog-entry-date,
+		#blog-entry-tags,
+		#blog-entry-description {
+			color: $light-text_interface;
+		}
+	}
+
+	#content-header {
+		border-bottom: $light-background_main 4px ridge;
+		color: $light-text_interface;
+	}
+
+	#content a {
+		color: $light-text_link;
+	}
+
+	#content-header a {
+		color: $light-text_link;
+	}
+
+	#content p code {
+		background-color: #0f141920;
+	}
+}

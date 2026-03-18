@@ -1,0 +1,179 @@
+@import "global_theming";
+
+/* ----------------
+   - Fedi Replies -
+   ---------------- */
+#fedi-replies {
+    margin-top: 5px;
+    margin-left: 5px;
+
+    .reply-box {
+        border-top: 2px ridge $background_main;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .left-box {
+        display: flex;
+        flex-direction: column;
+        flex: 0 0 9em;
+        max-width: 10em;
+        padding: 10px 0px;
+        border-right: 2px ridge $background_main;
+        background: $background_window;
+        overflow-x: hidden;
+
+        .avatar-box {
+            margin: 0 auto;
+            .avatar {
+                width: 64px;
+                height: 64px;
+                filter: drop-shadow(4px 4px 0px #0008);
+            }
+        }
+
+        .name-box {
+            padding-top: 10px;
+            margin: 0 auto;
+        }
+
+        .username {
+            font-weight: bolder;
+        }
+
+        .displayname {
+            font-weight: bolder;
+
+            .emojo {
+                height: 1em;
+                vertical-align: middle;
+            }
+        }
+    }
+
+    .right-box {
+        .infobar {
+            display: block;
+            align-content: center;
+            height: 1.2em;
+            padding-left: 10px;
+            background: $background_window;
+            border-bottom: 2px ridge $background_main;
+
+            .server,
+            .date,
+            .hour {
+                font-size: 0.8em;
+            }
+            .avatar {
+                display: none;
+                vertical-align: text-top;
+                height: 1rem;
+                width: 1rem;
+            }
+            .server {
+                color: $text_interface;
+            }
+        }
+
+        .message-body {
+            .emojo {
+                height: 1em;
+                transition: 1s;
+
+                &:hover {
+                    height: 3em;
+                }
+            }
+
+            .attachment {
+                margin: 0.5em 1em 0.5em 0;
+                height: 5em;
+                filter: drop-shadow(4px 4px 0px #0008);
+            }
+
+            flex: 1 0;
+            height: 100%;
+            padding: 0.5em;
+
+            p {
+                margin-top: 0;
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        width: 100%;
+        background: #0005;
+    }
+
+    #fr-howto {
+        flex: 1 1;
+        padding: 1em;
+        background: $background_window;
+        color: $text_interface;
+        font-size: 0.9rem;
+    }
+
+    #fr-loading-bar {
+        height: 8px;
+        background: url("images/loading-bar.gif");
+    }
+
+    .w-btn {
+        &.fd-link {
+            background: url("images/toot.gif");
+            width: 48px;
+            margin-right: 4px;
+        }
+    }
+}
+
+@media screen and (max-width: 60rem) {
+    #fedi-replies {
+        .right-box {
+            .infobar {
+                .avatar {
+                    display: unset;
+                }
+            }
+        }
+        .left-box {
+            display: none;
+        }
+        margin-left: 0;
+        order: 2;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    #fedi-replies {
+        .reply-box {
+            border-top: 2px ridge $light-background_main;
+        }
+
+        .left-box {
+            border-right: 2px ridge $light-background_main;
+            background: $light-background_window;
+        }
+
+        .right-box {
+            .infobar {
+                background: $light-background_window;
+                border-bottom: 2px ridge $light-background_main;
+                .server {
+                    color: $light-text_interface;
+                }
+                a {
+                    color: $light-text_link;
+                }
+            }
+
+            background: $light-background_main;
+        }
+
+        #fr-howto {
+            background: $light-background_window;
+            color: $light-text_interface;
+        }
+    }
+}

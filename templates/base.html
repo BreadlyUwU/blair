@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="static/css/base.css" type="text/css" />
+		<link rel="stylesheet" href="static/css/windows.css" type="text/css" />
+		<link rel="icon" href="static/favicon.png" type="image/png" />
+		<meta charset="utf-8" />
+		<meta pronouns="she/they" />
+		<meta name="fediverse:creator" content="Alexa@breadcat.run" />
+		<meta name="theme-color" content="#955b33" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<meta property="og:site_name" content="Breadcat's Lair" />
+		<meta property="og:locale" content="en_US" />
+		<link rel="alternate" type="application/atom+xml" title="RSS" href="#">
+	</head>
+	<body>
+		<div id="supermainbox">
+			{% include "modules/header.html" %}
+			<div id="mainbox">
+				<div id="sidebar-left">
+					{% include "modules/sidebar/bob.html" %}
+					{% include "modules/sidebar/toc.html" %}
+					{% include "modules/sidebar/debug-menu.html" %}
+					{% include "modules/sidebar/buttons-card.html" %}
+				</div>
+				{% block content %}
+				{% endblock %}
+			</div>
+			{% include "modules/footer.html" %}
+		</div>
+	</body>
+	<script src="static/js/internet_time.js"></script>
+</html>

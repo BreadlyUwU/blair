@@ -1,0 +1,371 @@
+@font-face {
+	font-family: "w95fa";
+	src: url("../fonts/w95fa.woff2") format(woff2), url("../fonts/w95fa.woff") format(woff), url("../fonts/w95fa.otf") format(opentype);
+}
+
+@font-face {
+	font-family: "sysfont";
+	src: url("../fonts/sysfont.woff2") format(woff2), url("../fonts/sysfont.woff") format(woff), url("../fonts/sysfont.otf") format(opentype);
+}
+
+@font-face {
+	font-family: "ubuntu";
+	src: url("../fonts/UbuntuSans-Regular-latin.woff2") format(woff2), url("../fonts/UbuntuSans-Regular-latin.woff") format(woff), url("../fonts/UbuntuSans-Regular.otf") format(opentype);
+}
+
+@mixin header-icon-sizing {
+	width: 21px;
+	height: 21px;
+}
+
+body {
+	color: #ffffff;
+	background: #955b33;
+	font-family: "w95fa", sans-serif;
+	font-size: 1.1rem;
+	margin: 0px;
+}
+
+#supermainbox {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+	align-items: stretch;
+	background: url("../images/bg.gif");
+}
+
+#header {
+    #header_l, #header_c, #header_r {
+        flex: 1;
+        box-sizing: border-box;
+        height: 100%;
+    }
+	#header_l {
+		display: inline;
+		flex-direction: row;
+		box-sizing: border-box;
+		justify-content: flex-start;
+
+		#icon-i18n {
+		    display: inline;
+			vertical-align: sub;
+			padding-left: 4px;
+		}
+	}
+
+	#header_c {
+		display: inline;
+		font-size: 1.1rem;
+		text-align: center;
+		align-content: center;
+	}
+
+	#header_r {
+		display: inline-flex;
+		flex-direction: row;
+		box-sizing: border-box;
+		align-items: center;
+		justify-content: flex-end;
+
+		#icon-fedi,
+		#icon-bluesky,
+		#icon-git,
+		#icon-atom {
+			@include header-icon-sizing;
+		}
+
+		#icon-atom {
+			padding-left: 1px;
+			padding-right: 2px
+		}
+
+		#icon-fedi,
+		#icon-bluesky,
+		#icon-git {
+			padding-left: 4px;
+		}
+
+        #icon-fedi {
+           	background: url("../images/links-btn/btn-mastodon.gif") no-repeat center center;
+        }
+
+        #icon-bluesky {
+           	background: url("../images/links-btn/btn-bluesky.gif") no-repeat center center;
+        }
+
+        #icon-atom {
+           	background: url("../images/atom.gif") no-repeat center center;
+        }
+	}
+
+	display: flex;
+	flex-flow: row wrap;
+	width: auto;
+	height: 26px;
+	box-sizing: content-box;
+	margin-bottom: 5px;
+	background: #955b33;
+	color: #ffccaa;
+	border-bottom: color-mix(in srgb, #955b33 40%, black) 2px solid;
+
+	overflow: hidden;
+
+	span {
+		font-family: "sysfont", monospace;
+		font-size: larger;
+		letter-spacing: 1px;
+	}
+
+	a {
+	    text-decoration: none;
+	}
+}
+
+
+#mainbox {
+	display: flex;
+	flex: 1 1 auto;
+	flex-direction: row;
+	align-self: stretch;
+	margin: 0px 5px;
+
+	box-sizing: border-box;
+}
+
+#sidebar-left>*:not(:first-child) {
+	margin-top: 5px;
+}
+
+#sidebar-left {
+	flex: 0 0 190px;
+	flex-direction: column;
+	box-sizing: border-box;
+
+	#bobvibes {
+		box-sizing: content-box;
+		height: 90px;
+		#bob {
+            /* width: auto; */
+            height: 70px;
+    		background: center / auto no-repeat url("../images/bobvibes.gif") #531515;
+    		image-rendering: pixelated;
+		}
+	}
+
+	#table-of-content {
+		.item {
+			width: auto;
+			height: 1.8em;
+			align-content: center;
+			font-size: 1em;
+			border-top: #955b33 2px ridge;
+			&.first {
+				border-top: none;
+			}
+			&:hover {
+				background: #FFFFFF20;
+			}
+		}
+		a {
+			text-decoration: none;
+		}
+	}
+
+	text-align: center;
+}
+
+#sidebar-right {
+	margin-left: 5px;
+}
+
+#content-box {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: fit-content;
+}
+
+#content {
+	#content-body {
+		flex: 1 0;
+	}
+
+	display: flex;
+	height: fit-content;
+	overflow-x: auto;
+	flex-direction: column;
+	align-content: stretch;
+	background: #2f0c0c;
+	margin-left: 5px;
+
+	article {
+		padding: 10px;
+	}
+
+	article h1,
+	article h2,
+	article h3,
+	article h4,
+	article h5 {
+		text-decoration: underline;
+	}
+
+	article p {
+		line-height: 1.4;
+	}
+
+	flex: 1 0;
+	letter-spacing: 0.2px;
+
+	pre {
+		font-size: 0.9rem;
+	}
+	:first-child {
+		margin-top: 0px;
+	}
+
+	:last-child {
+		margin-bottom: 0px;
+	}
+}
+
+#footer {
+	#ft-left {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		justify-content: flex-start;
+		text-align: left;
+	}
+
+	#ft-center {
+		flex: 1;
+		justify-content: center;
+		text-align: center;
+		img { max-height: 7rem; }
+		background-blend-mode: multiply;
+		width: fit-content;
+	}
+
+	#ft-right {
+		flex: 1;
+		justify-content: flex-end;
+		text-align: right;
+	}
+
+	span {
+		font-family: "sysfont";
+	}
+
+	img {
+		vertical-align: middle;
+	}
+
+	display: flex;
+	flex: 0 0 7rem;
+	flex-flow: row wrap;
+	width: auto;
+	box-sizing: border-box;
+	align-items: center;
+	align-content: center;
+	justify-content: space-between;
+	padding: 2px 10px;
+	margin-top: 5px;
+	background: #531515;
+	border-top: #955b33 4px ridge;
+	color: #ffccaa;
+	text-align: center;
+	line-height: 2rem; /* <-- Not sure it's the way to go but it's working */
+}
+
+a {
+	color: #e4ea92;
+}
+
+/* =====================
+   = Responsive Design =
+   ===================== */
+
+@media screen and (max-width: 60rem) {
+	#mainbox {
+		flex-direction: column;
+	}
+
+	#content {
+		margin-left: 0;
+		order: 1;
+	}
+
+	#sidebar-left {
+		order: 2;
+		margin-top: 5px;
+		#bobvibes {
+			order: 3;
+		}
+		#table-of-content .item {
+			height: 3em;
+		}
+		#buttons-card {
+			display: none;
+		}
+	}
+}
+
+/* ===============
+   = Light Theme =
+   ===============
+   Note: the choosen colors for the light theme are from Catppuccin Latte */
+
+@media (prefers-color-scheme: light) {
+	body {
+		color: #000000;
+		background: #eff1f5;
+	}
+
+	#supermainbox {
+		background: url("../images/bg-light.gif");
+	}
+
+	#header {
+		background: #ccd0da;
+		color: $light-text_interface;
+		border-bottom: #1e66f5 4px ridge;
+	}
+
+	#sidebar-left {
+		#bobvibes {
+			#bob {
+				background: center / auto no-repeat url("../images/bobvibes-light.gif") #ccd0da;
+			}
+		}
+
+		#table-of-content {
+			.item {
+				border-top: #eff1f5 2px ridge;
+			}
+
+			.item:hover, .item-first:hover {
+				background: #00000020;
+			}
+
+			a {
+				color: $light-text_interface;
+			}
+		}
+	}
+
+	#content {
+		background: #eff1f5;
+	}
+
+	#footer {
+		border-top: #1e66f5 4px ridge;
+		background: #ccd0da;
+		background-blend-mode: unset;
+		color: $light-text_interface
+	}
+
+	a {
+		color: #1e66f5
+	}
+}
