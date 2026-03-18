@@ -42,9 +42,9 @@ impl Configuration {
 
     pub fn base_url() -> String {
         let config: Configuration = Configuration::default_config();
-        match mode {
+        match config.running_mode.unwrap() {
             RunningMode::Production => return config.site_addr.unwrap(),
-            RunningMode::Debug => return format!("{}:{}", 
+            RunningMode::Debug => return format!("http://{}:{}", 
                 config.blair_listening_ip.unwrap(), 
                 config.blair_listening_port.unwrap()
             ),

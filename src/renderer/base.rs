@@ -1,3 +1,5 @@
+use crate::config;
+
 use actix_web::{
     HttpResponse, 
     Responder, 
@@ -7,8 +9,15 @@ use askama::Template;
 
 #[derive(Template)]
 #[template(path = "home.html")]
-struct BaseTemplate<'a> {
-    version: &'a str,
+struct BaseTemplate {
+    version: String,
+}
+
+impl BaseTemplate {
+    fn get_url(&self, val: &str) -> String {
+        let base_url = config::Configuration::base_url();
+        return format!("{base_url}{val}");
+    }
 }
 
 #[get("/")]
