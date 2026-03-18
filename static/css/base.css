@@ -13,11 +13,6 @@
 	src: url("../fonts/UbuntuSans-Regular-latin.woff2") format(woff2), url("../fonts/UbuntuSans-Regular-latin.woff") format(woff), url("../fonts/UbuntuSans-Regular.otf") format(opentype);
 }
 
-@mixin header-icon-sizing {
-	width: 21px;
-	height: 21px;
-}
-
 body {
 	color: #ffffff;
 	background: #955b33;
@@ -71,7 +66,8 @@ body {
 		#icon-bluesky,
 		#icon-git,
 		#icon-atom {
-			@include header-icon-sizing;
+			width: 21px;
+			height: 21px;
 		}
 
 		#icon-atom {
@@ -328,7 +324,7 @@ a {
 
 	#header {
 		background: #ccd0da;
-		color: $light-text_interface;
+		color: #4c4f69;
 		border-bottom: #1e66f5 4px ridge;
 	}
 
@@ -349,7 +345,7 @@ a {
 			}
 
 			a {
-				color: $light-text_interface;
+				color: #4c4f69;
 			}
 		}
 	}
@@ -362,7 +358,7 @@ a {
 		border-top: #1e66f5 4px ridge;
 		background: #ccd0da;
 		background-blend-mode: unset;
-		color: $light-text_interface
+		color: #4c4f69
 	}
 
 	a {
