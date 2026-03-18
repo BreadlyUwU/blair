@@ -21,7 +21,7 @@ impl Configuration {
             // site_name: Some(String::from("Breadcat's Lair")), 
             site_addr: Some(String::from("https://breadcat.run")), 
             blair_listening_ip: Some(Ipv4Addr::new(127, 0, 0, 1)), 
-            blair_listening_port: Some(8069) 
+            blair_listening_port: Some(8064) 
         }
     }
     
