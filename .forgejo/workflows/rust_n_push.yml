@@ -17,8 +17,8 @@ jobs:
       - name: Build project
         run: export PATH=$PATH:$HOME/.cargo/bin && source $HOME/.cargo/env && cargo build --release
 
-      - name: Install rsync
-        run: sudo apt install -y rsync
+      - name: Install rsync and sshpass
+        run: sudo apt update && sudo apt install -y rsync sshpass
 
       - name: Upload the new binary
         env:
