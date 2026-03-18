@@ -1,6 +1,7 @@
 pub trait StandardBlairFunctions { 
     fn get_url(&self, val: &str) -> String;
     fn get_version(&self) -> String;
+    fn get_compile_time(&self) -> String;
 }
 
 #[macro_export]
@@ -14,6 +15,10 @@ macro_rules! standard_func_set {
 
                 fn get_version(&self) -> String {
                     return String::from(env!("CARGO_PKG_VERSION"));
+                }
+
+                fn get_compile_time(&self) -> String {
+                    return "[Not yet implemented]".to_string()
                 }
         })+
     }
