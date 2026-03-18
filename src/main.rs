@@ -1,19 +1,10 @@
 mod config;
 use colored::Colorize;
 
-use config::RunningMode;
-use config::RunningMode::Production as ProdMode;
-use config::RunningMode::Debug as DebugMode;
-
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     #[cfg(debug_assertions)]
     unsafe { std::env::set_var("RUST_LOG", "debug"); }
-
-    #[cfg(debug_assertions)]
-    static RUNNING_MODE: RunningMode = DebugMode;
-    #[cfg(not(debug_assertions))]
-    static RUNNING_MODE: RunningMode = ProdMode;
 
     println!("===============================================");
     println!("=    X0:                                      =");
@@ -48,9 +39,9 @@ async fn main() -> std::io::Result<()> {
     println!(
         "- Version: {}\n- Mode: {}\n",
         env!("CARGO_PKG_VERSION").bold(),
-        match RUNNING_MODE {
-            DebugMode => "Debug (°o°)".red().bold(),
-            ProdMode => "Release (^_^)".green().bold(),
+        match config::Configuration::get_running_mode() {
+            config::RunningMode::Debug => "Debug (°o°)".red().bold(),
+            config::RunningMode::Production => "Release (^_^)".green().bold(),
         }
     );
 
