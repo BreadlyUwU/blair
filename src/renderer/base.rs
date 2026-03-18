@@ -23,7 +23,7 @@ impl BaseTemplate {
 #[get("/")]
 pub async fn home() -> impl Responder {
     let helloworld = BaseTemplate { 
-        version: env!("CARGO_PKG_VERSION") 
+        version: String::from(env!("CARGO_PKG_VERSION"))
     };
     match helloworld.render() {
         Ok(render) => HttpResponse::Ok().content_type("text/html").body(render),
