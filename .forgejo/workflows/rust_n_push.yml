@@ -1,0 +1,42 @@
+name: Build Blair and push the update
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-upload:
+    runs-on: codeberg-small
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain 1.92 -y
+
+      - name: Build project
+        run: export PATH=$PATH:$HOME/.cargo/bin && source $HOME/.cargo/env && cargo build --release
+
+      - name: Install rsync
+        run: sudo apt install -y rsync
+
+      - name: Upload the new binary
+        env:
+          BLAIR_HOST: ${{ secrets.BLAIR_HOST }}
+          BLAIR_HOST_PORT: ${{ secrets.BLAIR_HOST_PORT }}
+          BLAIR_HOST_PWD: ${{ secrets.BLAIR_HOST_PWD }}
+        run: rsync -avz --rsh="sshpass -p $BLAIR_HOST_PWD ssh -p $BLAIR_HOST_PORT -o StrictHostKeyChecking=no" target/release/blair breadly@$BLAIR_HOST:~/blair/
+
+      - name: Upload the updated static files
+        env:
+          BLAIR_HOST: ${{ secrets.BLAIR_HOST }}
+          BLAIR_HOST_PORT: ${{ secrets.BLAIR_HOST_PORT }}
+          BLAIR_HOST_PWD: ${{ secrets.BLAIR_HOST_PWD }}
+        run: rsync -avz --delete --rsh="sshpass -p $BLAIR_HOST_PWD ssh -p $BLAIR_HOST_PORT -o StrictHostKeyChecking=no" static breadly@$BLAIR_HOST:~/blair/
+
+      - name: Restart Blair on the remote server
+        env:
+          BLAIR_HOST: ${{ secrets.BLAIR_HOST }}
+          BLAIR_HOST_PORT: ${{ secrets.BLAIR_HOST_PORT }}
+          BLAIR_HOST_PWD: ${{ secrets.BLAIR_HOST_PWD }}
+        run: ssh $BLAIR_HOST:$BLAIR_HOST_PORT "printf '%s\n' "$BLAIR_HOST_PWD" | sudo -S systemctl restart breadcat-blair"
