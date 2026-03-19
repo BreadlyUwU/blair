@@ -1,0 +1,25 @@
+{% macro draw(
+    id="", 
+    back = false, 
+    title = "-3-", 
+    beat = false
+) -%}
+    <div class="window" id="{{id}}">
+        <div class="w-titlebar">
+            <div class="w-left">
+                {% if back == true %}<a href="javascript:window.history.back();"><div class="w-btn arrow" title="Back"></div></a>{% endif %}
+                <div class="w-title" {% if beat == true %}id="internet-time"{% endif %} ><span>{{title}}</span></div>
+            </div>
+            <div class="w-right">
+                <div class="w-btn minimize"></div>
+                <div class="w-btn maximize"></div>
+                <div class="w-btn close"></div>
+            </div>
+        </div>
+        {% if caller is defined %}
+            {{ caller() }}
+        {% else %}
+            <span> </span>
+        {% endif %}
+    </div>
+{%- endmacro draw %}
