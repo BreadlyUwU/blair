@@ -1,6 +1,6 @@
 [package]
 name = "blair"
-version = "0.0.6-askama-reboot"
+version = "0.0.7-askama-reboot"
 edition = "2024"
 
 [dependencies]
