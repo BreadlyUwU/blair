@@ -6,9 +6,9 @@ pub trait BlairStandardFunctions {
 }
 
 #[macro_export]
-macro_rules! standard_func_set {
+macro_rules! load_BlairStandardFunctions {
     ($($t:ty),+) => {
-        $(impl super::functions::StandardBlairFunctions for $t {
+        $(impl super::functions::BlairStandardFunctions for $t {
                 fn get_url(&self, val: &str) -> String {
                     let base_url = config::Configuration::base_url();
                     return format!("{base_url}{val}");
@@ -19,10 +19,10 @@ macro_rules! standard_func_set {
                 }
 
                 fn get_compile_time(&self) -> String {
-                    return "[Not yet implemented]".to_string()
+                    return String::from("[unimplemented]")
                 }
         })+
     }
 }
 
-pub(crate) use standard_func_set;
+pub(crate) use load_BlairStandardFunctions;

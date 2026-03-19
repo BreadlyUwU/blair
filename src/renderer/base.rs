@@ -1,6 +1,6 @@
 use crate::config;
 use super::functions;
-use super::functions::StandardBlairFunctions;
+use super::functions::BlairStandardFunctions;
 
 use actix_web::{
     HttpResponse, 
@@ -17,7 +17,7 @@ struct BaseTemplate;
 #[template(path = "404.html")]
 struct Err404Template;
 
-functions::standard_func_set!(BaseTemplate, Err404Template);
+functions::load_BlairStandardFunctions!(BaseTemplate, Err404Template);
 
 #[get("/")]
 pub async fn home() -> impl Responder {
