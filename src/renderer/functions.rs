@@ -1,5 +1,5 @@
 #[allow(dead_code)]
-pub trait StandardBlairFunctions { 
+pub trait BlairStandardFunctions { 
     fn get_url(&self, val: &str) -> String;
     fn get_version(&self) -> String;
     fn get_compile_time(&self) -> String;
