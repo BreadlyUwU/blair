@@ -1,15 +1,5 @@
-<div class="window" id="table-of-content">
-    <div class="w-titlebar">
-        <div class="w-left">
-            <div class="w-title"><span>Welcome~</span></div>
-        </div>
-        <div class="w-right">
-            <div class="w-btn minimize"></div>
-            <div class="w-btn maximize"></div>
-            <div class="w-btn close"></div>
-        </div>
-    </div>
-    <a href="/" alt="Home" title="Home">
+{% call window::draw(id="table-of-content", title="Welcome~") %}
+    <a href="{{ get_url("/") }}" alt="Home" title="Home">
         <div class="item first">Home</div>
     </a>
 
@@ -24,4 +14,4 @@
     <a href="#" alt="Links" title="The good links">
         <div class="item"><s>The good stinks</s></div>
     </a>
-</div>
+{% endcall %}

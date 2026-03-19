@@ -1,14 +1,4 @@
-<div class="window" id="buttons-card">
-    <div class="w-titlebar">
-        <div class="w-left">
-            <div class="w-title"><span>The Buttons</span></div>
-        </div>
-        <div class="w-right">
-            <div class="w-btn minimize"></div>
-            <div class="w-btn maximize"></div>
-            <div class="w-btn close"></div>
-        </div>
-    </div>
+{% call window::draw(id="buttons-card", title="The Buttons") %}
     <img src="static/images/btn/transrats.gif" title="Trans Rats (Trans Rights are Human Rights)">
     <a href="https://yesterweb.org/no-to-web3/"><img src="static/images/btn/notoweb3.gif" title="Say no to Web3"></a>
     <br>
@@ -26,4 +16,4 @@
     <br>
     <img src="static/images/btn/ulysses.gif" title="Ulysse 31">
     <a href="https://dk64randomizer.com/"><img src="static/images/btn/dk64gaming.gif" title="Donkey Kong 64 Randomizer"></a>
-</div>
+{% endcall %}

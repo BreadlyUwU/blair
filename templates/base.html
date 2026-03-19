@@ -1,9 +1,10 @@
+{% import "macros/window.html" as window %}
 <!DOCTYPE html>
 <html>
 	<head>
-		<link rel="stylesheet" href="static/css/base.css" type="text/css" />
-		<link rel="stylesheet" href="static/css/windows.css" type="text/css" />
-		<link rel="icon" href="static/favicon.png" type="image/png" />
+		<link rel="stylesheet" href="{{ get_url("/static/css/base.css") }}" type="text/css" />
+		<link rel="stylesheet" href="{{ get_url("/static/css/windows.css") }}" type="text/css" />
+		<link rel="icon" href="{{ get_url("/static/favicon.png") }}" type="image/png" />
 		<meta charset="utf-8" />
 		<meta pronouns="she/they" />
 		<meta name="fediverse:creator" content="Alexa@breadcat.run" />
@@ -29,5 +30,5 @@
 			{% include "modules/footer.html" %}
 		</div>
 	</body>
-	<script src="static/js/internet_time.js"></script>
+	<script src="{{ get_url("/static/js/internet_time.js") }}"></script>
 </html>

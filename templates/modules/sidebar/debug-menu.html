@@ -1,18 +1,8 @@
-<div class="window" id="table-of-content">
-    <div class="w-titlebar">
-        <div class="w-left">
-            <div class="w-title"><span>⚠️ DEBUG MENU</span></div>
-        </div>
-        <div class="w-right">
-            <div class="w-btn minimize"></div>
-            <div class="w-btn maximize"></div>
-            <div class="w-btn close"></div>
-        </div>
-    </div>
+{% call window::draw(id="table-of-content", title="⚠️ DEBUG MENU") %}
     <a href="#">
         <div class="item first"><s>Blog post tags (all)</s></div>
     </a>
     <a href="REDRUM">
         <div class="item">Trigger 404 error</div>
     </a>
-</div>
+{% endcall %}
