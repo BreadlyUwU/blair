@@ -1,4 +1,4 @@
 pub mod base;
-pub mod functions;
 
+mod functions;
 mod error;
