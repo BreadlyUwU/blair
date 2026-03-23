@@ -24,7 +24,7 @@ pub async fn home() -> impl Responder {
     let template = BaseTemplate;
     match template.render() {
         Ok(render) => HttpResponse::Ok().content_type("text/html").body(render),
-        Err(e) => HttpResponse::InternalServerError().body(crate::renderer::error::render_error(e)),
+        Err(e) => HttpResponse::InternalServerError().body(crate::renderer::error::askama_error(e)),
     }
 }
 
@@ -32,6 +32,6 @@ pub async fn _404() -> impl Responder {
     let template = Err404Template;
     match template.render() {
         Ok(render) => HttpResponse::NotFound().content_type("text/html").body(render),
-        Err(e) => HttpResponse::InternalServerError().body(crate::renderer::error::render_error(e)),
+        Err(e) => HttpResponse::InternalServerError().body(crate::renderer::error::askama_error(e)),
     }
 }
