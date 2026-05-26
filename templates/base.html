@@ -21,7 +21,9 @@
 				<div id="sidebar-left">
 					{% include "modules/sidebar/bob.html" %}
 					{% include "modules/sidebar/toc.html" %}
-					{% include "modules/sidebar/debug-menu.html" %}
+					{% if is_debug() == true %}
+						{% include "modules/sidebar/debug-menu.html" %}
+					{% endif %}
 					{% include "modules/sidebar/buttons-card.html" %}
 				</div>
 				{% block content %}
