@@ -12,7 +12,8 @@
             "sourceMap": {},
             "sourceLanguages": [
                 "rust"
-            ]
+            ],
+            "console": "internalConsole"
         }
     ]
 }
