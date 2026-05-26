@@ -9,8 +9,12 @@ pub trait BlairStandardFunctions {
 macro_rules! load_BlairStandardFunctions {
     ($($t:ty),+) => {
         $(impl super::functions::BlairStandardFunctions for $t {
+                // =============
+                // = START! 🔊 =
+                // =============
+
                 fn get_url(&self, val: &str) -> String {
-                    let base_url = config::Configuration::base_url();
+                    let base_url = config::init().current_base_url;
                     return format!("{base_url}{val}");
                 }
 
@@ -21,6 +25,10 @@ macro_rules! load_BlairStandardFunctions {
                 fn get_compile_time(&self) -> String {
                     return String::from("[unimplemented]")
                 }
+
+                // ==============
+                // = FINISH! 🏁 =
+                // ==============
         })+
     }
 }
