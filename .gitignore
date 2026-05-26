@@ -1,4 +1,4 @@
 /target
-/.make.env
+/make.env
 /Cargo.lock
 .directory
