@@ -18,9 +18,9 @@ pub fn launch(bconf: &crate::config::Configuration) -> Result<Server, std::io::E
                             .use_last_modified(true),
                     )
                     .service(crate::health::health_check_endpoint)
-                    .service(crate::renderer::base::home)
+                    .service(crate::renderer::home::home)
                     //.Error 404
-                    .default_service(web::route().to(crate::renderer::base::_404))
+                    .default_service(web::route().to(crate::renderer::errors::_404))
             })
             .listen(listener)?
             .run();

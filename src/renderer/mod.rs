@@ -1,4 +1,4 @@
-pub mod base;
+pub mod home;
+pub mod errors;
 
 mod functions;
-mod error;
