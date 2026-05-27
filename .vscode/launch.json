@@ -15,14 +15,18 @@
             ],
             "console": "internalConsole",
             "internalConsoleOptions": "openOnSessionStart",
+            "serverReadyAction": {
+                "pattern": "Ready! c:",
+                "action": "startDebugging",
+                "name": "Preview B⋅LAIR",
+                "killOnServerStop": true,
+            }
         },
-        // {
-        //     "name": "WebView",
-        //     "request": "launch",
-        //     "type": "editor-browser",
-        //     "preLaunchTask": "rust: cargo run",
-        //     "url": "http://127.0.0.1:8064",
-        //     "webRoot": "${workspaceFolder}"
-        // },
+        {
+            "type": "editor-browser",
+            "request": "launch",
+            "name": "Preview B⋅LAIR",
+            "url": "http://127.0.0.1:8064",
+        },
     ]
 }
