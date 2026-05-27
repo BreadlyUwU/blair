@@ -11,17 +11,17 @@ use askama::Template;
 
 #[derive(Template)]
 #[template(path = "home.html")]
-struct BaseTemplate;
+struct HomeTemplate;
 
 #[derive(Template)]
 #[template(path = "404.html")]
 struct Err404Template;
 
-functions::load_BlairStandardFunctions!(BaseTemplate, Err404Template);
+functions::load_BlairStandardFunctions!(HomeTemplate, Err404Template);
 
 #[get("/")]
 pub async fn home() -> impl Responder {
-    let template = BaseTemplate;
+    let template = HomeTemplate;
     match template.render() {
         Ok(render) => HttpResponse::Ok().content_type("text/html").body(render),
         Err(e) => HttpResponse::InternalServerError().body(crate::renderer::error::askama_error(e)),
