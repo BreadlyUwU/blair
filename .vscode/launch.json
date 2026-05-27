@@ -13,7 +13,16 @@
             "sourceLanguages": [
                 "rust"
             ],
-            "console": "internalConsole"
-        }
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart",
+        },
+        // {
+        //     "name": "WebView",
+        //     "request": "launch",
+        //     "type": "editor-browser",
+        //     "preLaunchTask": "rust: cargo run",
+        //     "url": "http://127.0.0.1:8064",
+        //     "webRoot": "${workspaceFolder}"
+        // },
     ]
 }
