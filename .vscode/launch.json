@@ -19,14 +19,14 @@
                 "pattern": "Ready! c:",
                 "action": "startDebugging",
                 "name": "Preview B⋅LAIR",
-                "killOnServerStop": true,
+                "killOnServerStop": true
             }
         },
         {
             "type": "editor-browser",
             "request": "launch",
             "name": "Preview B⋅LAIR",
-            "url": "http://127.0.0.1:8064",
-        },
+            "url": "http://127.0.0.1:8064"
+        }
     ]
 }
