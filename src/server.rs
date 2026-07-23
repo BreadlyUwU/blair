@@ -18,9 +18,12 @@ pub fn launch(bconf: &crate::config::Configuration) -> Result<Server, std::io::E
                             //.show_files_listing()
                             .use_last_modified(true),
                     )
+                    // Service de la page d'accueil
+                    .service(crate::renderer::root::home)
+                    // Service des pages potentielles
+                    .service(crate::renderer::root::root)
                     // Service du health-check
                     .service(crate::health::health_check_endpoint)
-                    .service(crate::renderer::home::home)
                     //.Error 404
                     .default_service(web::route().to(crate::renderer::errors::_404))
             })
