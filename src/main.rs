@@ -10,9 +10,9 @@ async fn main() -> std::io::Result<()> {
 
     #[cfg(debug_assertions)]
     unsafe { std::env::set_var("RUST_LOG", "debug"); }
-    
+
     let b_configuration: crate::config::Configuration = crate::config::init();
-    
+
     println!(
         "- Version: \x1b[1m{}\x1b[0m\n- Mode: {}\n",
         env!("CARGO_PKG_VERSION"),
