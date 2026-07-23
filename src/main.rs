@@ -23,7 +23,7 @@ async fn main() -> std::io::Result<()> {
     );
 
     env_logger::init();
-    println!("\x1b[1m\x1b[34mReady! c:\x1b[0m\n");
+    println!("\x1b[1m\x1b[34mReady! c:\nServing to: \x1b[0m{}\n", b_configuration.current_base_url);
     crate::server::launch(&b_configuration)?.await?;
     Ok(())
 }
