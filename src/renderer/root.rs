@@ -1,0 +1,42 @@
+use crate::config;
+use super::functions;
+use super::functions::BlairStandardFunctions;
+use actix_web::{
+    HttpResponse, 
+    HttpRequest,
+    Responder, 
+    get
+};
+use askama::Template;
+
+// Root page
+#[derive(Template)]
+#[template(path = "home.html")]
+struct HomeTemplate;
+functions::load_BlairStandardFunctions!(HomeTemplate);
+#[get("/")]
+pub async fn home() -> impl Responder {
+    let template = HomeTemplate;
+    match template.render() {
+        Ok(render) => HttpResponse::Ok().content_type("text/html").body(render),
+        Err(e) => HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e)),
+    }
+}
+
+// Potential pages
+#[get("/{uri}")]
+pub async fn root(req: HttpRequest) -> impl Responder {
+    let uri = req.match_info().get("uri").unwrap();
+    match uri {
+        "foo" => HttpResponse::Ok().body("bar"),
+        "hongkong" => HttpResponse::Ok().body("fufu"),
+        // Render the regular 404 error page if any invalid input is received
+        _ => {
+            let template = super::errors::Err404Template;
+                match template.render() {
+                    Ok(render) => HttpResponse::NotFound().content_type("text/html").body(render),
+                    Err(e) => HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e)),
+                }
+        },
+    }
+}
