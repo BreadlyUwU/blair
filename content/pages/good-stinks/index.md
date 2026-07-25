@@ -1,7 +1,7 @@
-+++
-title = "The good links to the good stinks"
-description = "Every peoples/critters/sentients and other living things I follow or that I think are cool"
-+++
+---
+title: The good links to the good stinks
+description: Every peoples/critters/sentients and other living things I follow or that I think are cool
+---
 
 #### Here's the peeps I follow on the web who do cool stuff or are just cool living things, check out their dens!
 
