@@ -3,12 +3,12 @@ name = "blair"
 version = "0.0.8-rust-reboot"
 edition = "2024"
 
-[profile.release]
-strip = true
-opt-level = "z"
-lto = true
-codegen-units = 1
-panic = "abort"
+# [profile.release]
+# strip = true
+# opt-level = "z"
+# lto = true
+# codegen-units = 1
+# panic = "abort"
 
 [dependencies]
 actix-files = "0.6.10"
