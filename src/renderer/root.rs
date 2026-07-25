@@ -29,14 +29,26 @@ pub async fn root(req: HttpRequest) -> impl Responder {
     let uri = req.match_info().get("uri").unwrap();
     match uri {
         "foo" => HttpResponse::Ok().body("bar"),
-        "hongkong" => HttpResponse::Ok().body("fufu"),
         // Render the regular 404 error page if any invalid input is received
         _ => {
             let template = super::errors::Err404Template;
-                match template.render() {
-                    Ok(render) => HttpResponse::NotFound().content_type("text/html").body(render),
-                    Err(e) => HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e)),
-                }
+            match template.render() {
+                Ok(render) => HttpResponse::NotFound().content_type("text/html").body(render),
+                Err(e) => HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e)),
+            }
         },
+    }
+}
+
+// Favicon
+#[get("/favicon{ext}")]
+pub async fn favicon(req: HttpRequest) -> actix_web::Result<actix_files::NamedFile> {
+    let ext = req.match_info().get("ext").unwrap();
+    match ext {
+        ".ico" => Ok(actix_files::NamedFile::open("./static/favicon.ico")?),
+        ".png" => Ok(actix_files::NamedFile::open("./static/favicon.png")?),
+        // Fallback: favicon.ico | IDK how to deal with errors here
+        "" => Ok(actix_files::NamedFile::open("./static/favicon.ico")?),
+        _  => Ok(actix_files::NamedFile::open("./static/favicon.ico")?)
     }
 }

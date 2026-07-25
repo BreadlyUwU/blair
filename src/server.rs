@@ -12,18 +12,26 @@ pub fn launch(bconf: &crate::config::Configuration) -> Result<Server, std::io::E
                     .wrap(middleware::NormalizePath::new(
                         middleware::TrailingSlash::Trim,
                     ))
+
                     // Service des fichiers statiques
                     .service(
                         actix_files::Files::new("/static", "static/")
                             //.show_files_listing()
                             .use_last_modified(true),
                     )
+
+                    // Service de la favicon (eh wi)
+                    .service(crate::renderer::root::favicon)
+
                     // Service de la page d'accueil
                     .service(crate::renderer::root::home)
+
                     // Service des pages potentielles
                     .service(crate::renderer::root::root)
+
                     // Service du health-check
                     .service(crate::health::health_check_endpoint)
+
                     //.Error 404
                     .default_service(web::route().to(crate::renderer::errors::_404))
             })
