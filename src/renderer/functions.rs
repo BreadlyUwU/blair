@@ -9,7 +9,7 @@ pub trait BlairStandardFunctions {
 #[macro_export]
 macro_rules! load_BlairStandardFunctions {
     ($($t:ty),+) => {
-        $(impl super::functions::BlairStandardFunctions for $t {
+        $(impl functions::BlairStandardFunctions for $t {
             // =============
             // = START! 🔊 =
             // =============

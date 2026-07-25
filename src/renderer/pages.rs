@@ -5,45 +5,61 @@ use std::fs;
 use fs_walk::{self, WalkOptions};
 use markdown;
 use actix_web::{
-    HttpResponse, 
-    Responder, 
+    HttpResponse,
+    Responder,
     get
 };
 use askama::Template;
 
 const PAGES_DIR: &str = "./content/pages";
-// const BLOG_DIR: &str = "./content/blog";
+const BLOG_DIR: &str = "./content/blog";
 
 struct Frontmatter {
     title: String,
-    description: Option<String>,
+    description: String,
+    slang: Option<String>,
     date: Option<String>,
     tags: Option<Vec<String>>,
-    slang: String,
+    extra: Option<Vec<String>>,
 }
 
-struct Page {
+pub struct Page {
     front: Frontmatter,
-    directory: String, // idk yet if "directory" should point to the FS location or the app endpoint
-    filename: String, // Must be at the root of the page's directory
-    opt_files: Option<Vec<String>>,
+    directory: std::path::PathBuf,
+    // filename: String, // Must be at the root of the page's directory
+    static_files: Option<Vec<std::path::PathBuf>>,
 }
 
-struct BlogPost {
-    front: Frontmatter,
-    directory: String,
-    opt_files: Option<Vec<String>>,
-}
+/**
+========================= 📃
+= Collecting the PAGIES = 📃
+========================= 📃
+Si un dossier à l'intérieur de "./content/{pages,blog}" contient
+un fichier nommé "index.md" ALORS ce dernier sera parsé et la fonction
+inscrira dans un Vec:
+ *  Le nom de la page/titre d'article
+ *  La description
+ *  Le nom du dossier dans lequel il se trouve (qui servira de slang);
+ *  (Si) la date de l'article (normalement récupérable dans le nom du dossier)
+ *  Les tags de l'article ou (peu probablement) de la page
+ *  Et enfin le HTML du contenu parsé à partir du markdown
 
-// Collecting the PAGIES 📃📃📃
+À explorer également plus tard:
+ *  Faire en sorte que si dans un dossier il y a plusieurs fichiers MD,
+   alors B⋅LAIR devra être capable de les servirs séparément:
+   ex:
+     /quelque-chose/index.md <- https://breadcat.run/quelque-chose
+     /quelque-chose/more.md  <- https://breadcat.run/quelque-chose/more
+   (/quelque-chose/more devra avoir également accès aux mêmes fichiers statiques que /quelque-chose, mais c'est peut-être quelque-chose qu'Askama pourra m'aider à gérer avec la fonction get_url(), à la condition que le parsing des fichiers Markdown ne part pas en vrille à la présence de syntaxe Jinja)
+**/
 fn yooka_laylee() /* -> Vec<Page> */ {
     let mut page_collection: Vec<(u32, Page)>;
     let mut page_collector: Vec<String>;
     let walker_root = WalkOptions::new()
-        // .dirs()
         .max_depth(2)
+        .ends_with(".md")
         .walk(PAGES_DIR);
-    
+
     // for dir in walker.flatten().enumerate() {
     //     let mut collector: Vec<std::path::PathBuf> = Vec::new();
 
@@ -63,6 +79,7 @@ fn yooka_laylee() /* -> Vec<Page> */ {
 }
 
 // Parsing every blog posts present inside /content/blog-posts
+// ↑ (May be also handled by yooka_laylee after all)
 // fn banjo_kazooie() -> Vec<BlogPost> {}
 
 // For debug:
