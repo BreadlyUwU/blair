@@ -57,3 +57,15 @@ pub async fn favicon(req: HttpRequest) -> actix_web::Result<actix_files::NamedFi
         _  => Ok(actix_files::NamedFile::open("./static/favicon.ico")?)
     }
 }
+
+// 404 Error Page
+#[derive(Template)]
+#[template(path = "404.html")]
+pub struct Err404Template;
+functions::load_BlairStandardFunctions!(Err404Template);
+pub async fn _404() -> impl Responder {
+    match Err404Template.render() {
+        Ok(render) => HttpResponse::NotFound().content_type("text/html").body(render),
+        Err(e) => HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e)),
+    }
+}

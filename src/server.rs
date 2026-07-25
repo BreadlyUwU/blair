@@ -33,7 +33,7 @@ pub fn launch(bconf: &crate::config::Configuration) -> Result<Server, std::io::E
                     .service(crate::health::health_check_endpoint)
 
                     //.Error 404
-                    .default_service(web::route().to(crate::renderer::errors::_404))
+                    .default_service(web::route().to(crate::renderer::_404))
             })
             .listen(listener)?
             .run();

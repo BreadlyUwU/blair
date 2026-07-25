@@ -1,17 +1,8 @@
-use crate::config;
-use super::functions;
-use super::functions::BlairStandardFunctions;
-use actix_web::{
-    HttpResponse, 
-    Responder
-};
-use askama::Template;
-
-pub fn askama_error(err: askama::Error) -> String { 
+pub fn askama_error(err: askama::Error) -> String {
     return render_message(
-        err.to_string(), 
+        err.to_string(),
         Some("Something went wrong during the template's rendering by Askama")
-    ); 
+    );
 }
 
 fn render_message(err: String, opt_message: Option<&str>) -> String {
@@ -38,16 +29,4 @@ fn render_message(err: String, opt_message: Option<&str>) -> String {
 ", err
  , Some(opt_message).unwrap().ok_or("(No additional information supplied by the error handler)")
 );
-}
-
-#[derive(Template)]
-#[template(path = "404.html")]
-pub struct Err404Template;
-functions::load_BlairStandardFunctions!(Err404Template);
-pub async fn _404() -> impl Responder {
-    let template = Err404Template;
-    match template.render() {
-        Ok(render) => HttpResponse::NotFound().content_type("text/html").body(render),
-        Err(e) => HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e)),
-    }
 }
