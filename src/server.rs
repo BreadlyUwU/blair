@@ -20,14 +20,14 @@ pub fn launch(bconf: &crate::config::Configuration) -> Result<Server, std::io::E
                             .use_last_modified(true),
                     )
 
-                    // Service de la favicon (eh wi)
-                    .service(crate::renderer::favicon)
-
                     // Service de la page d'accueil
                     .service(crate::renderer::home)
 
                     // Service des pages potentielles
                     .service(crate::renderer::root)
+
+                    // Service de la favicon (eh wi)
+                    .service(crate::renderer::favicon)
 
                     // Service du health-check
                     .service(crate::health::health_check_endpoint)

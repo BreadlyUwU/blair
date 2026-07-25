@@ -14,7 +14,7 @@ use askama::Template;
 const PAGES_DIR: &str = "./content/pages";
 const BLOG_DIR: &str = "./content/blog";
 
-struct Frontmatter {
+pub struct Frontmatter {
     title: String,
     description: String,
     slang: Option<String>,
@@ -24,10 +24,11 @@ struct Frontmatter {
 }
 
 pub struct Page {
-    front: Frontmatter,
+    frontmatter: Frontmatter,
     directory: std::path::PathBuf,
-    // filename: String, // Must be at the root of the page's directory
-    static_files: Option<Vec<std::path::PathBuf>>,
+    filename: Option<String>, // Needed only if it isn't about the `index.md` file
+    static_files: Option<Vec<std::path::PathBuf>>, // List of every optional files located at the page/article root folder
+    html: String // <- The HTML output of the markdown parser
 }
 
 /**
@@ -36,13 +37,7 @@ pub struct Page {
 ========================= 📃
 Si un dossier à l'intérieur de "./content/{pages,blog}" contient
 un fichier nommé "index.md" ALORS ce dernier sera parsé et la fonction
-inscrira dans un Vec:
- *  Le nom de la page/titre d'article
- *  La description
- *  Le nom du dossier dans lequel il se trouve (qui servira de slang);
- *  (Si) la date de l'article (normalement récupérable dans le nom du dossier)
- *  Les tags de l'article ou (peu probablement) de la page
- *  Et enfin le HTML du contenu parsé à partir du markdown
+créera une struct `Page` qui sera ensuite réutilisé par Askama pour le rendu final
 
 À explorer également plus tard:
  *  Faire en sorte que si dans un dossier il y a plusieurs fichiers MD,
@@ -50,7 +45,10 @@ inscrira dans un Vec:
    ex:
      /quelque-chose/index.md <- https://breadcat.run/quelque-chose
      /quelque-chose/more.md  <- https://breadcat.run/quelque-chose/more
-   (/quelque-chose/more devra avoir également accès aux mêmes fichiers statiques que /quelque-chose, mais c'est peut-être quelque-chose qu'Askama pourra m'aider à gérer avec la fonction get_url(), à la condition que le parsing des fichiers Markdown ne part pas en vrille à la présence de syntaxe Jinja)
+   (/quelque-chose/more devra avoir également accès aux mêmes fichiers 
+   statiques que /quelque-chose, mais c'est peut-être quelque-chose qu'Askama 
+   pourra m'aider à gérer avec la fonction get_url(), à la condition que le 
+   parsing des fichiers Markdown ne part pas en vrille à la présence de syntaxe Jinja)
 **/
 fn yooka_laylee() /* -> Vec<Page> */ {
     let mut page_collection: Vec<(u32, Page)>;
