@@ -63,10 +63,6 @@ pub fn yooka_laylee() -> Vec<Page> {
     return page_collection
 }
 
-// Parsing every blog posts present inside /content/blog-posts
-// ↑ (May be also handled by yooka_laylee after all)
-// fn banjo_kazooie() -> Vec<BlogPost> {}
-
 // For debug:
 #[allow(dead_code)]
 fn create_dummy_page() -> Page {
@@ -76,10 +72,10 @@ fn create_dummy_page() -> Page {
             title: String::from("This is a test"), 
             description: String::from("This is only a test"), 
             slang: None, 
-            draft: Some(false),
+            draft: Some(true),
             date: Some(20690101),
-            tags: None,
-            extra: None,
+            tags: Some(vec!["test".to_string()]),
+            extra: Some(vec![("Is this a test?".to_string(), "*HL1 Announcer Voice* Yes.".to_string())]),
         },
         content: String::from("<img src='./assets/dreamcat.jpg' style='max-width: 30vw; display: block; float: right;'/>
 <center><audio controls src='./assets/this_is_a_test.opus' autoplay></audio></center>
