@@ -2,12 +2,6 @@ use crate::config::RunningMode;
 use std::fs;
 use fs_walk::{self, WalkOptions};
 use markdown;
-use actix_web::{
-    HttpResponse,
-    Responder,
-    get
-};
-use askama::Template;
 
 const PAGES_DIR: &str = "./content/pages";
 const BLOG_DIR: &str = "./content/blog";
