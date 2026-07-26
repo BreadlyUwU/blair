@@ -11,19 +11,19 @@ async fn main() -> std::io::Result<()> {
     #[cfg(debug_assertions)]
     unsafe { std::env::set_var("RUST_LOG", "debug"); }
 
-    let b_configuration: crate::config::Configuration = crate::config::init();
+    let blair_config: crate::config::Configuration = crate::config::init();
 
     println!(
         "- Version: \x1b[1m{}\x1b[0m\n- Mode: {}\n",
         env!("CARGO_PKG_VERSION"),
-        match &b_configuration.running_mode {
+        match &blair_config.running_mode {
             crate::config::RunningMode::Debug => "\x1b[1m\x1b[31mDebug (°o°)\x1b[0m",
             crate::config::RunningMode::Production => "\x1b[1m\x1b[32mRelease (^_^)\x1b[0m",
         }
     );
 
     env_logger::init();
-    println!("\x1b[1m\x1b[34mReady! c:\nServing to: \x1b[0m{}\n", b_configuration.current_base_url);
-    crate::server::launch(&b_configuration)?.await?;
+    println!("\x1b[1m\x1b[34mReady! c:\nServing to: \x1b[0m{}\n", blair_config.current_base_url);
+    crate::server::launch(&blair_config)?.await?;
     Ok(())
 }
