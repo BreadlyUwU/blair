@@ -10,6 +10,8 @@ lazy_static! {
                 crate::renderer::pages::yooka_laylee()
             )
         );
+
+    pub static ref BLAIR_CONFIG: crate::config::Configuration = crate::config::init();
 }
 
 pub fn launch(bconf: &crate::config::Configuration) -> Result<Server, std::io::Error> {
