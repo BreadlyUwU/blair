@@ -14,6 +14,16 @@ use actix_web::{
 };
 use askama::Template;
 
+#[macro_export]
+macro_rules! _404Error {
+    () => {
+        match Err404Template.render() {
+            Ok(render) => HttpResponse::NotFound().content_type("text/html").body(render),
+            Err(e) => HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e)),
+        }
+    };
+}
+
 // Homepage
 #[derive(Template)]
 #[template(path = "home.html")]
@@ -78,8 +88,6 @@ pub async fn favicon(req: HttpRequest) -> actix_web::Result<actix_files::NamedFi
 pub struct Err404Template;
 functions::load_BlairStandardFunctions!(Err404Template);
 pub async fn _404() -> impl Responder {
-    match Err404Template.render() {
-        Ok(render) => HttpResponse::NotFound().content_type("text/html").body(render),
-        Err(e) => HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e)),
-    }
+    _404Error!()
 }
+
