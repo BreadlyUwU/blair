@@ -43,7 +43,7 @@ pub fn launch(bconf: &crate::config::Configuration) -> Result<Server, std::io::E
                     .service(crate::renderer::favicon)
 
                     // Service du health-check
-                    .service(crate::health::health_check_endpoint)
+                    .service(crate::health::check)
 
                     //.Error 404
                     .default_service(web::route().to(crate::renderer::_404))
