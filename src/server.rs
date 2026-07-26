@@ -26,6 +26,9 @@ pub fn launch(bconf: &crate::config::Configuration) -> Result<Server, std::io::E
                         middleware::TrailingSlash::Trim,
                     ))
 
+                    // Service de la favicon (eh wi)
+                    .service(crate::renderer::favicon)
+
                     // Service des fichiers statiques
                     .service(
                         actix_files::Files::new("/static", "static/")
