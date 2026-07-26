@@ -1,6 +1,4 @@
-use crate::config;
-use super::functions;
-use super::functions::BlairStandardFunctions;
+use crate::config::RunningMode;
 use std::fs;
 use fs_walk::{self, WalkOptions};
 use markdown;
@@ -14,21 +12,29 @@ use askama::Template;
 const PAGES_DIR: &str = "./content/pages";
 const BLOG_DIR: &str = "./content/blog";
 
+#[derive(Clone)]
 pub struct Frontmatter {
-    title: String,
-    description: String,
-    slang: Option<String>,
-    date: Option<String>,
-    tags: Option<Vec<String>>,
-    extra: Option<Vec<String>>,
+    pub title: String,
+    pub description: String,
+    pub slang: Option<String>,
+    pub date: Option<u32>,
+    pub tags: Option<Vec<String>>,
+    pub extra: Option<Vec<String>>,
 }
 
+#[derive(Clone)]
 pub struct Page {
-    frontmatter: Frontmatter,
-    directory: std::path::PathBuf,
-    filename: Option<String>, // Needed only if it isn't about the `index.md` file
-    static_files: Option<Vec<std::path::PathBuf>>, // List of every optional files located at the page/article root folder
-    html: String // <- The HTML output of the markdown parser
+    pub frontmatter: Frontmatter,
+    pub directory: Option<std::path::PathBuf>,
+    pub filename: Option<String>, // Needed only if it isn't about the `index.md` file
+    pub static_files: Option<Vec<std::path::PathBuf>>, // List of every optional files located at the page/article root folder
+    pub content: String // <- The HTML output of the markdown parser
+}
+
+impl Page {
+    pub fn slang(&self) -> Option<&str> {
+        self.frontmatter.slang.as_deref()
+    }
 }
 
 /**
@@ -50,9 +56,13 @@ créera une struct `Page` qui sera ensuite réutilisé par Askama pour le rendu 
    pourra m'aider à gérer avec la fonction get_url(), à la condition que le 
    parsing des fichiers Markdown ne part pas en vrille à la présence de syntaxe Jinja)
 **/
-fn yooka_laylee() /* -> Vec<Page> */ {
-    let mut page_collection: Vec<(u32, Page)>;
+pub fn yooka_laylee() -> Vec<Page> {
+    let mut page_collection: Vec<Page> = vec![];
     let mut page_collector: Vec<String>;
+    if let RunningMode::Debug = crate::config::init().running_mode { 
+        let dummy_page: Page = create_dummy_page();
+        page_collection.push(dummy_page) 
+    }
     let walker_root = WalkOptions::new()
         .max_depth(2)
         .ends_with(".md")
@@ -74,6 +84,8 @@ fn yooka_laylee() /* -> Vec<Page> */ {
     for entry in walker_root.flatten() {
         println!("{:?}", entry);
     }
+
+    return page_collection
 }
 
 // Parsing every blog posts present inside /content/blog-posts
@@ -81,6 +93,25 @@ fn yooka_laylee() /* -> Vec<Page> */ {
 // fn banjo_kazooie() -> Vec<BlogPost> {}
 
 // For debug:
-pub async fn test_page(){
- //
+#[allow(dead_code)]
+fn create_dummy_page() -> Page {
+    return Page {
+        frontmatter: Frontmatter {
+            title: String::from("This is a test"), 
+            description: String::from("This is only a test"), 
+            slang: Some(String::from("test-page")), 
+            date: Some(20690101),
+            tags: None,
+            extra: None,
+        },
+        directory: None,
+        filename: None,
+        static_files: None,
+        content: String::from("<h1>This is a test</h1>
+<h2>This is only a test</h2>
+<h3>Yet another test</h3>
+<h4>I'm not in a hurry…</h4>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique.</p>
+"),
+    }
 }
