@@ -1,7 +1,7 @@
-// pub mod root;
 pub mod errors;
-mod pages;
+pub mod pages;
 mod functions;
+use crate::server::PAGE_COLLECTION;
 
 use crate::config;
 // use super::functions;
@@ -14,7 +14,7 @@ use actix_web::{
 };
 use askama::Template;
 
-// Root page
+// Homepage
 #[derive(Template)]
 #[template(path = "home.html")]
 struct HomeTemplate;
@@ -27,20 +27,35 @@ pub async fn home() -> impl Responder {
     }
 }
 
-// Potential pages
+// Pages (Root-level)
+#[derive(Template)]
+#[template(path = "page.html")]
+struct PageTemplate { page: pages::Page }
+functions::load_BlairStandardFunctions!(PageTemplate);
 #[get("/{uri}")]
-pub async fn root(req: HttpRequest) -> impl Responder {
+pub async fn page(req: HttpRequest) -> impl Responder {
     let uri = req.match_info().get("uri").unwrap();
-    match uri {
-        "foo" => HttpResponse::Ok().body("bar"),
-        // Render the regular 404 error page if any invalid input is received
-        _ => {
-            // let template = Err404Template;
-            match Err404Template.render() {
-                Ok(render) => HttpResponse::NotFound().content_type("text/html").body(render),
+
+    if let Ok(page_collection) = &PAGE_COLLECTION.read() {
+        if let Some(page) = page_collection.iter().find(|page| {
+            match page.slang() {
+                Some(slang) => slang == uri,
+                None => false,
+            }}) 
+        {
+            let page_template = PageTemplate { page: page.clone() };
+            return match page_template.render() {
+                Ok(render) => HttpResponse::Ok()
+                    .content_type("text/html")
+                    .body(render),
                 Err(e) => HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e)),
-            }
-        },
+            };
+        }
+    }
+
+    match Err404Template.render() {
+        Ok(render) => HttpResponse::NotFound().content_type("text/html").body(render),
+        Err(e) => HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e)),
     }
 }
 

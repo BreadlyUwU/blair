@@ -1,5 +1,16 @@
 use actix_web::{App, HttpServer, dev::Server, middleware, web};
 use std::net::TcpListener;
+use lazy_static::lazy_static;
+use std::sync::{Arc, RwLock};
+
+lazy_static! {
+    pub static ref PAGE_COLLECTION: Arc<RwLock<Vec<crate::renderer::pages::Page>>> = 
+        Arc::new(
+            RwLock::new(
+                crate::renderer::pages::yooka_laylee()
+            )
+        );
+}
 
 pub fn launch(bconf: &crate::config::Configuration) -> Result<Server, std::io::Error> {
     // let listener = TcpListener::bind(config::Configuration::get_listener())?;
@@ -24,7 +35,7 @@ pub fn launch(bconf: &crate::config::Configuration) -> Result<Server, std::io::E
                     .service(crate::renderer::home)
 
                     // Service des pages potentielles
-                    .service(crate::renderer::root)
+                    .service(crate::renderer::page)
 
                     // Service de la favicon (eh wi)
                     .service(crate::renderer::favicon)

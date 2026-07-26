@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+	<head>
+		<title>{{ page.frontmatter.title }} - Breadcat's Lair</title>
+		<meta name="description" content="{{ page.frontmatter.description }}" />
+	</head>
+	{% call window::draw(id="content", back=true, title=page.frontmatter.title) %}
+		<article>
+			{{ page.content | safe }}
+		</article>
+	{% endcall %}
+{% endblock content %}
