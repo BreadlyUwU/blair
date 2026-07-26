@@ -4,7 +4,6 @@ mod functions;
 use crate::server::PAGE_COLLECTION;
 
 use crate::config;
-// use super::functions;
 use functions::BlairStandardFunctions;
 use actix_web::{
     HttpResponse,
@@ -37,35 +36,44 @@ pub async fn home() -> impl Responder {
     }
 }
 
-// Pages (Root-level)
+// Pages
 #[derive(Template)]
 #[template(path = "page.html")]
 struct PageTemplate { page: pages::Page }
 functions::load_BlairStandardFunctions!(PageTemplate);
-#[get("/{uri}")]
+#[get("/{uri:.*}")]
 pub async fn page(req: HttpRequest) -> impl Responder {
     let uri = req.match_info().get("uri").unwrap();
+    let normal_uri = if uri.ends_with("/") { uri.split_at(uri.len() - 1).0 } else { uri };
+    let pages = &PAGE_COLLECTION.read().unwrap();
 
-    if let Ok(page_collection) = &PAGE_COLLECTION.read() {
-        if let Some(page) = page_collection.iter().find(|page| {
-            match page.slang() {
-                Some(slang) => slang == uri,
-                None => false,
-            }}) 
-        {
-            let page_template = PageTemplate { page: page.clone() };
-            return match page_template.render() {
-                Ok(render) => HttpResponse::Ok()
-                    .content_type("text/html")
-                    .body(render),
-                Err(e) => HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e)),
-            };
+    // Verifie en premier si la requête porte vers un fichier se trouvant à l'intérieur
+    // du dossier dédié à la page et le renvoi le cas échéant
+    if pages::is_potential_opt_file(normal_uri) {
+        let expected_file = format!("./content/pages/{uri}");
+        match actix_files::NamedFile::open(expected_file) {
+            Ok(file) => file.into_response(&req),
+            Err(_) => _404Error!()
         }
-    }
-
-    match Err404Template.render() {
-        Ok(render) => HttpResponse::NotFound().content_type("text/html").body(render),
-        Err(e) => HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e)),
+    } 
+    else {
+        match pages.iter().find(|page| page.id == normal_uri) {
+            Some(page) => {
+                let template = PageTemplate { page: page.clone() };
+                return match template.render() {           
+                    Ok(render) => { 
+                        // Redirection automatique pour les pages, afin que l'URL se termine systématiquement par un slash
+                        // (Sinon, ça fout la merde)
+                        if !uri.ends_with("/") {
+                            return HttpResponse::MovedPermanently().append_header(("Location", format!("/{}/", normal_uri))).finish()
+                        }
+                        HttpResponse::Ok().content_type("text/html").body(render)
+                    },
+                    Err(e) => HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e))
+                }
+            },
+            None => _404Error!()
+        }
     }
 }
 

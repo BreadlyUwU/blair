@@ -1,6 +1,6 @@
 use crate::config::RunningMode;
-use std::fs;
 use fs_walk::{self, WalkOptions};
+use std::fs;
 use markdown;
 
 const PAGES_DIR: &str = "./content/pages";
@@ -12,25 +12,18 @@ pub struct Frontmatter {
     pub title: String,
     pub description: String,
     pub slang: Option<String>,
+    pub draft: Option<bool>,
     pub date: Option<u32>,
     pub tags: Option<Vec<String>>,
-    pub extra: Option<Vec<String>>,
+    pub extra: Option<Vec<(String, String)>>,
 }
 
 #[allow(dead_code)]
 #[derive(Clone)]
 pub struct Page {
+    pub id: String, // <- Basically the slang, used as the endpoint: either the '.md' file folder's name, or the frontmatter's slang if present
     pub frontmatter: Frontmatter,
-    pub directory: Option<std::path::PathBuf>,
-    pub filename: Option<String>, // Needed only if it isn't about the `index.md` file
-    pub static_files: Option<Vec<std::path::PathBuf>>, // List of every optional files located at the page/article root folder
     pub content: String // <- The HTML output of the markdown parser
-}
-
-impl Page {
-    pub fn slang(&self) -> Option<&str> {
-        self.frontmatter.slang.as_deref()
-    }
 }
 
 /**
@@ -54,31 +47,17 @@ créera une struct `Page` qui sera ensuite réutilisé par Askama pour le rendu 
 **/
 pub fn yooka_laylee() -> Vec<Page> {
     let mut page_collection: Vec<Page> = vec![];
-    let mut page_collector: Vec<String>;
-    if let RunningMode::Debug = crate::config::init().running_mode { 
-        let dummy_page: Page = create_dummy_page();
-        page_collection.push(dummy_page) 
-    }
+
+    // Si B⋅LAIR est démarré en mode Debug, alors une page de test sera générée et accessible à l'endpoint /test-page
+    if let RunningMode::Debug = crate::config::init().running_mode { page_collection.push(create_dummy_page()) }
+
     let walker_root = WalkOptions::new()
         .max_depth(2)
         .ends_with(".md")
         .walk(PAGES_DIR);
 
-    // for dir in walker.flatten().enumerate() {
-    //     let mut collector: Vec<std::path::PathBuf> = Vec::new();
-
-    //     let index_file = WalkOptions::new().files().extension("md").walk(&dir.1);
-    //     let index_file_flatten = index_file.flatten();
-    //     for root_file in index_file_flatten {
-    //         collector.push(root_file);
-    //     }
-    //     for dir_inside_dir in WalkOptions::new().dirs().walk(&dir.1).flatten().enumerate() {
-    //         let file_inside_dir = WalkOptions::new().files().walk(&dir_inside_dir.1);
-    //     }
-    // }
-
     for entry in walker_root.flatten() {
-        println!("{:?}", entry);
+        log::debug!("Reading page: {:?}", entry);
     }
 
     return page_collection
@@ -92,18 +71,19 @@ pub fn yooka_laylee() -> Vec<Page> {
 #[allow(dead_code)]
 fn create_dummy_page() -> Page {
     return Page {
+        id: String::from("test-page"),
         frontmatter: Frontmatter {
             title: String::from("This is a test"), 
             description: String::from("This is only a test"), 
-            slang: Some(String::from("test-page")), 
+            slang: None, 
+            draft: Some(false),
             date: Some(20690101),
             tags: None,
             extra: None,
         },
-        directory: None,
-        filename: None,
-        static_files: None,
-        content: String::from("<h1>This is a test</h1>
+        content: String::from("<img src='./assets/dreamcat.jpg' style='max-width: 30vw; display: block; float: right;'/>
+<center><audio controls src='./assets/this_is_a_test.opus' autoplay></audio></center>
+<h1>This is a test</h1>
 <h2>This is only a test</h2>
 <h3>Yet another test</h3>
 <h4>I'm not in a hurry…</h4>
@@ -111,4 +91,8 @@ fn create_dummy_page() -> Page {
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique.</p>
 "),
     }
+}
+
+pub fn is_potential_opt_file(uri: &str) -> bool {
+    uri.ends_with(".png") || uri.ends_with(".jpg") || uri.ends_with(".gif") || uri.ends_with(".webp") || uri.ends_with(".opus")
 }
