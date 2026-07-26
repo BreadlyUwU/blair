@@ -22,9 +22,10 @@ pub fn launch(bconf: &crate::config::Configuration) -> Result<Server, std::io::E
             let server = HttpServer::new(move || {
                 App::new()
                     .wrap(middleware::Logger::default())
-                    .wrap(middleware::NormalizePath::new(
-                        middleware::TrailingSlash::Trim,
-                    ))
+                    // ↓ Désactivé car foutait la merde avec la redirection automatique
+                    // .wrap(middleware::NormalizePath::new(
+                    //     middleware::TrailingSlash::Trim,
+                    // ))
 
                     // Service de la favicon (eh wi)
                     .service(crate::renderer::favicon)
@@ -41,9 +42,6 @@ pub fn launch(bconf: &crate::config::Configuration) -> Result<Server, std::io::E
 
                     // Service des pages potentielles
                     .service(crate::renderer::page)
-
-                    // Service de la favicon (eh wi)
-                    .service(crate::renderer::favicon)
 
                     // Service du health-check
                     .service(crate::health::check)
