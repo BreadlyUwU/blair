@@ -15,7 +15,7 @@ macro_rules! load_BlairStandardFunctions {
             // =============
 
             fn get_url(&self, val: &str) -> String {
-                let base_url = config::init().current_base_url;
+                let base_url = &BLAIR.current_base_url;
                 return format!("{base_url}{val}");
             }
 
@@ -28,7 +28,7 @@ macro_rules! load_BlairStandardFunctions {
             }
 
             fn is_debug(&self) -> bool {
-                let mode = config::init().running_mode;
+                let mode = &BLAIR.running_mode;
                 match mode {
                     crate::config::RunningMode::Debug => return true,
                     crate::config::RunningMode::Production => return false,

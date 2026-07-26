@@ -1,3 +1,4 @@
+use crate::config::BLAIR;
 use actix_web::{App, HttpServer, dev::Server, middleware, web};
 use std::net::TcpListener;
 use lazy_static::lazy_static;
@@ -14,10 +15,10 @@ lazy_static! {
     pub static ref BLAIR_CONFIG: crate::config::Configuration = crate::config::init();
 }
 
-pub fn launch(bconf: &crate::config::Configuration) -> Result<Server, std::io::Error> {
+pub fn launch() -> Result<Server, std::io::Error> {
     // let listener = TcpListener::bind(config::Configuration::get_listener())?;
     // let listener: Result<TcpListener, std::io::Error> = TcpListener::bind(format!("{}:{}", config.listening_ip, config.listening_port));
-    match TcpListener::bind(format!("{}:{}", bconf.listening_ip, bconf.listening_port)) {
+    match TcpListener::bind(format!("{}:{}", BLAIR.listening_ip, BLAIR.listening_port)) {
         Ok(listener) => {
             let server = HttpServer::new(move || {
                 App::new()

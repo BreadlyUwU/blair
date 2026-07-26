@@ -3,6 +3,8 @@ mod config;
 mod server;
 mod health;
 mod renderer;
+use config::BLAIR;
+
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -11,19 +13,17 @@ async fn main() -> std::io::Result<()> {
     #[cfg(debug_assertions)]
     unsafe { std::env::set_var("RUST_LOG", "debug"); }
 
-    let blair_config: crate::config::Configuration = crate::config::init();
-
     println!(
         "- Version: \x1b[1m{}\x1b[0m\n- Mode: {}\n",
         env!("CARGO_PKG_VERSION"),
-        match &blair_config.running_mode {
+        match BLAIR.running_mode {
             crate::config::RunningMode::Debug => "\x1b[1m\x1b[31mDebug (°o°)\x1b[0m",
             crate::config::RunningMode::Production => "\x1b[1m\x1b[32mRelease (^_^)\x1b[0m",
         }
     );
 
     env_logger::init();
-    println!("\x1b[1m\x1b[34mReady! c:\nServing to: \x1b[0m{}\n", blair_config.current_base_url);
-    crate::server::launch(&blair_config)?.await?;
+    println!("\x1b[1m\x1b[34mReady! c:\nServing to: \x1b[0m{}\n", BLAIR.current_base_url);
+    crate::server::launch()?.await?;
     Ok(())
 }

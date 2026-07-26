@@ -1,9 +1,9 @@
+use crate::config::BLAIR;
+use crate::server::PAGE_COLLECTION;
 pub mod errors;
 pub mod pages;
 mod functions;
-use crate::server::PAGE_COLLECTION;
 
-use crate::config;
 use functions::BlairStandardFunctions;
 use actix_web::{
     HttpResponse,

@@ -1,4 +1,5 @@
 use std::net::Ipv4Addr;
+use lazy_static::lazy_static;
 
 pub struct Configuration {
     // site_name: Option<String>,
@@ -33,4 +34,8 @@ pub fn init() -> Configuration {
     };
 
     return Configuration { running_mode, site_addr: site_url, listening_ip, listening_port, current_base_url }
+}
+
+lazy_static! {
+    pub static ref BLAIR: Configuration = crate::config::init();
 }
