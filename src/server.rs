@@ -4,11 +4,13 @@ use std::net::TcpListener;
 use lazy_static::lazy_static;
 use std::sync::{Arc, RwLock};
 
+use crate::renderer::pages::YLMode;
+
 lazy_static! {
     pub static ref PAGE_COLLECTION: Arc<RwLock<Vec<crate::renderer::pages::Page>>> = 
         Arc::new(
             RwLock::new(
-                crate::renderer::pages::yooka_laylee()
+                crate::renderer::pages::yooka_laylee(YLMode::Page)
             )
         );
 

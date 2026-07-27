@@ -1,17 +1,21 @@
+use crate::config::BLAIR;
 use crate::config::RunningMode;
 use fs_walk::{self, WalkOptions};
+use markdown::{CompileOptions, Options};
+use serde::Deserialize;
 use std::fs;
-use markdown;
+
 
 const PAGES_DIR: &str = "./content/pages";
 const BLOG_DIR: &str = "./content/blog";
 
 #[allow(dead_code)]
-#[derive(Clone)]
+#[derive(Clone, Default, Deserialize)]
+#[serde(default)]
 pub struct Frontmatter {
     pub title: String,
     pub description: String,
-    pub slang: Option<String>,
+    pub slug: Option<String>,
     pub draft: Option<bool>,
     pub date: Option<u32>,
     pub tags: Option<Vec<String>>,
@@ -45,22 +49,96 @@ créera une struct `Page` qui sera ensuite réutilisé par Askama pour le rendu 
    pourra m'aider à gérer avec la fonction get_url(), à la condition que le 
    parsing des fichiers Markdown ne part pas en vrille à la présence de syntaxe Jinja)
 **/
-pub fn yooka_laylee() -> Vec<Page> {
-    let mut page_collection: Vec<Page> = vec![];
+pub enum YLMode { Page, Blog }
+pub fn yooka_laylee(mode: YLMode) -> Vec<Page> {
+    let mut collection: Vec<Page> = vec![];
 
-    // Si B⋅LAIR est démarré en mode Debug, alors une page de test sera générée et accessible à l'endpoint /test-page
-    if let RunningMode::Debug = crate::config::init().running_mode { page_collection.push(create_dummy_page()) }
+    // Si B⋅LAIR est démarré en mode Debug, alors une page de test sera générée et accessible à l'endpoint (blog)/test-page
+    if let RunningMode::Debug = &BLAIR.running_mode { collection.push(create_dummy_page()) }
 
-    let walker_root = WalkOptions::new()
-        .max_depth(2)
-        .ends_with(".md")
-        .walk(PAGES_DIR);
+    // Collectionite go brrr
+    let walker_root = match mode {
+        YLMode::Page => WalkOptions::new()
+                            .max_depth(2)
+                            .ends_with(".md")
+                            .walk(PAGES_DIR),
+        YLMode::Blog => WalkOptions::new()
+                            .max_depth(2)
+                            .ends_with(".md")
+                            .walk(BLOG_DIR)
+    };
 
+    // Parse le fichier markdown trouvé pour le dégraisser comme un niveau de DK64
     for entry in walker_root.flatten() {
         log::debug!("Reading page: {:?}", entry);
+
+        // « Lui sucer les yeux… »
+        let file: String = fs::read_to_string(&entry).unwrap();
+        
+        // « Le retourner comme un gant… »
+        let (frontmatter, markdown_body) = retrieve_frontmatter(&file);
+        let markdown_content = markdown::to_html_with_options(markdown_body.as_str(), &Options {
+            compile: CompileOptions {
+                allow_dangerous_html: true,
+                ..CompileOptions::default()
+            },
+            ..Options::default()
+        });
+
+        // « Arracher les ongles… »
+        let mut page = Page {
+            id: entry
+                .parent()
+                .and_then(|path| path.file_name())
+                .and_then(|name| name.to_str())
+                .unwrap()
+                .to_string(),
+            frontmatter: frontmatter.unwrap_or_default(),
+            content: markdown_content.unwrap()
+        };
+
+        // Voilà la partie du programme qui sera la plus probablement inutile
+        if let Some(slug) = &page.frontmatter.slug {
+            page.id = slug.clone();
+        }
+
+        // « Laissez-le courir, viande meilleure avec du sel ! »
+        log::debug!("Parsing of \"{}\" completed, sending to the collection", &page.id);
+        collection.push(page)
+    };
+
+    return collection
+}
+
+fn retrieve_frontmatter(source: &str) -> (Option<Frontmatter>, String) {
+    let trim = source.trim_start();
+    if !trim.starts_with("---") {
+        return (None, trim.to_string());
     }
 
-    return page_collection
+    let mut lines = trim.lines();
+    let _opening_delimiter = lines.next();
+
+    let mut fmt_lines = Vec::new();
+    for line in lines.by_ref() {
+        if line.trim() == "---" { break; }
+        fmt_lines.push(line);
+    }
+    
+    let body = lines.collect::<Vec<_>>().join("\n");
+    let fmt_text = fmt_lines.join("\n");
+
+    match yaml_serde::from_str::<Frontmatter>(&fmt_text) {
+        Ok(frontmatter) => (Some(frontmatter), body),
+        Err(e) => {
+            log::warn!("Error while parsing frontmatter: {}", e);
+            (None, source.to_string())
+        }
+    }
+}
+
+pub fn is_potential_opt_file(uri: &str) -> bool {
+    uri.ends_with(".png") || uri.ends_with(".jpg") || uri.ends_with(".gif") || uri.ends_with(".webp") || uri.ends_with(".opus")
 }
 
 // For debug:
@@ -71,7 +149,7 @@ fn create_dummy_page() -> Page {
         frontmatter: Frontmatter {
             title: String::from("This is a test"), 
             description: String::from("This is only a test"), 
-            slang: None, 
+            slug: None, 
             draft: Some(true),
             date: Some(20690101),
             tags: Some(vec!["test".to_string()]),
@@ -87,8 +165,4 @@ fn create_dummy_page() -> Page {
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique.</p>
 "),
     }
-}
-
-pub fn is_potential_opt_file(uri: &str) -> bool {
-    uri.ends_with(".png") || uri.ends_with(".jpg") || uri.ends_with(".gif") || uri.ends_with(".webp") || uri.ends_with(".opus")
 }
