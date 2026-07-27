@@ -1,6 +1,6 @@
 [package]
 name = "blair"
-version = "0.0.8-rust-reboot"
+version = "0.1.0-skibidi-boilerplate"
 edition = "2024"
 
 # [profile.release]
