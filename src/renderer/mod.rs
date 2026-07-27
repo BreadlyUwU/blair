@@ -1,4 +1,4 @@
-use crate::config::BLAIR;
+use crate::config::{BLAIR, RunningMode};
 use crate::server::{PAGE_COLLECTION, BLOG_COLLECTION};
 pub mod errors;
 pub mod pages;
@@ -61,16 +61,19 @@ pub async fn blog_posts(req: HttpRequest) -> impl Responder {
         match posts.iter().find(|posts| posts.id == normal_uri) {
             Some(post) => {
                 let template = PageTemplate { page: post.clone() };
-                return match template.render() {           
-                    Ok(render) => { 
-                        // Redirection automatique pour les pages, afin que l'URL se termine systématiquement par un slash
-                        // (Sinon, ça fout la merde)
-                        if !uri.ends_with("/") {
-                            return HttpResponse::MovedPermanently().append_header(("Location", format!("/{}/", normal_uri))).finish()
-                        }
-                        HttpResponse::Ok().content_type("text/html").body(render)
-                    },
-                    Err(e) => HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e))
+                if post.frontmatter.draft == Some(true) && let RunningMode::Production = &BLAIR.running_mode { _404Error!() }
+                else {
+                    return match template.render() {           
+                        Ok(render) => { 
+                            // Redirection automatique pour les pages, afin que l'URL se termine systématiquement par un slash
+                            // (Sinon, ça fout la merde)
+                            if !uri.ends_with("/") {
+                                return HttpResponse::MovedPermanently().append_header(("Location", format!("/{}/", normal_uri))).finish()
+                            }
+                            HttpResponse::Ok().content_type("text/html").body(render)
+                        },
+                        Err(e) => HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e))
+                    }    
                 }
             },
             None => _404Error!()
