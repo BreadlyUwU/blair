@@ -36,6 +36,13 @@ pub fn launch() -> Result<Server, std::io::Error> {
                     //     middleware::TrailingSlash::Trim,
                     // ))
 
+                    // ATTENTION: Mettre les points d'entrés statiques EN PREMIER
+                    // Sinon ils sont écrasés par les endpoints dynamiques
+                    // (typiquement "pages" et "blog-posts")
+
+                    // Service du health-check
+                    .service(crate::health::check)
+
                     // Service de la favicon (eh wi)
                     .service(crate::renderer::favicon)
 
@@ -54,9 +61,6 @@ pub fn launch() -> Result<Server, std::io::Error> {
 
                     // Service des pages potentielles
                     .service(crate::renderer::page)
-
-                    // Service du health-check
-                    .service(crate::health::check)
 
                     //.Error 404
                     .default_service(web::route().to(crate::renderer::_404))
