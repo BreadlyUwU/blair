@@ -1,5 +1,5 @@
 use crate::config::BLAIR;
-use crate::server::PAGE_COLLECTION;
+use crate::server::{PAGE_COLLECTION, BLOG_COLLECTION};
 pub mod errors;
 pub mod pages;
 mod functions;
@@ -36,11 +36,49 @@ pub async fn home() -> impl Responder {
     }
 }
 
-// Pages
 #[derive(Template)]
 #[template(path = "page.html")]
 struct PageTemplate { page: pages::Page }
 functions::load_BlairStandardFunctions!(PageTemplate);
+
+// Blog Posts
+#[get("/blog/{uri:.*}")]
+pub async fn blog_posts(req: HttpRequest) -> impl Responder {
+    let uri = req.match_info().get("uri").unwrap();
+    let normal_uri = if uri.ends_with("/") { uri.split_at(uri.len() - 1).0 } else { uri };
+    let posts = &BLOG_COLLECTION.read().unwrap();
+
+    // Verifie en premier si la requête porte vers un fichier se trouvant à l'intérieur
+    // du dossier dédié à la page et le renvoi le cas échéant
+    if pages::is_potential_opt_file(normal_uri) {
+        let expected_file = format!("./content/blog/{uri}");
+        match actix_files::NamedFile::open(expected_file) {
+            Ok(file) => file.into_response(&req),
+            Err(_) => _404Error!()
+        }
+    } 
+    else {
+        match posts.iter().find(|posts| posts.id == normal_uri) {
+            Some(post) => {
+                let template = PageTemplate { page: post.clone() };
+                return match template.render() {           
+                    Ok(render) => { 
+                        // Redirection automatique pour les pages, afin que l'URL se termine systématiquement par un slash
+                        // (Sinon, ça fout la merde)
+                        if !uri.ends_with("/") {
+                            return HttpResponse::MovedPermanently().append_header(("Location", format!("/{}/", normal_uri))).finish()
+                        }
+                        HttpResponse::Ok().content_type("text/html").body(render)
+                    },
+                    Err(e) => HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e))
+                }
+            },
+            None => _404Error!()
+        }
+    }
+}
+
+// Pages
 #[get("/{uri:.*}")]
 pub async fn page(req: HttpRequest) -> impl Responder {
     let uri = req.match_info().get("uri").unwrap();
