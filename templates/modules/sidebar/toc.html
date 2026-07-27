@@ -1,5 +1,5 @@
 {% call window::draw(id="table-of-content", title="Welcome~") %}
-    <a href="{{ get_url("/") }}" alt="Home" title="Home">
+    <a href='{{ get_url("/") }}'' alt="Home" title="Home">
         <div class="item first">Home</div>
     </a>
 
@@ -7,11 +7,11 @@
         <div class="item"><s>Blog</s></div>
     </a>
 
-    <a href="#" alt="Contact" title="Contact">
-        <div class="item"><s>Contact</s></div>
+    <a href='{{ get_url("/contact") }}'' alt="Contact" title="Contact">
+        <div class="item">Contact</div>
     </a>
 
-    <a href="#" alt="Links" title="The good links">
-        <div class="item"><s>The good stinks</s></div>
+    <a href='{{ get_url("/good-stinks") }}' alt="Links" title="The good links">
+        <div class="item">The good stinks</div>
     </a>
 {% endcall %}
