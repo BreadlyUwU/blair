@@ -2,12 +2,18 @@ use crate::config::BLAIR;
 use crate::config::RunningMode;
 use chrono::prelude::*;
 use fs_walk::{self, WalkOptions};
+use lazy_static::lazy_static;
 use markdown::{CompileOptions, Options};
 use serde::Deserialize;
 use std::fs;
 
 const PAGES_DIR: &str = "./content/pages";
 const BLOG_DIR: &str = "./content/blog";
+
+lazy_static! {
+    pub static ref PAGE_COLLECTION: Vec<Page> = yooka_laylee(YLMode::Page);
+    pub static ref BLOG_COLLECTION: Vec<Page> = yooka_laylee(YLMode::Blog);
+}
 
 #[allow(dead_code)]
 #[derive(Clone, Default, Deserialize)]
@@ -44,9 +50,9 @@ créera une struct `Page` qui sera ensuite réutilisé par Askama pour le rendu 
    ex:
      /quelque-chose/index.md <- https://breadcat.run/quelque-chose
      /quelque-chose/more.md  <- https://breadcat.run/quelque-chose/more
-   (/quelque-chose/more devra avoir également accès aux mêmes fichiers 
-   statiques que /quelque-chose, mais c'est peut-être quelque-chose qu'Askama 
-   pourra m'aider à gérer avec la fonction get_url(), à la condition que le 
+   (/quelque-chose/more devra avoir également accès aux mêmes fichiers
+   statiques que /quelque-chose, mais c'est peut-être quelque-chose qu'Askama
+   pourra m'aider à gérer avec la fonction get_url(), à la condition que le
    parsing des fichiers Markdown ne part pas en vrille à la présence de syntaxe Jinja)
 **/
 pub enum YLMode { Page, Blog }
@@ -74,7 +80,7 @@ pub fn yooka_laylee(mode: YLMode) -> Vec<Page> {
 
         // « Lui sucer les yeux… »
         let file: String = fs::read_to_string(&entry).unwrap();
-        
+
         // « Le retourner comme un gant… »
         let (frontmatter, markdown_body) = retrieve_frontmatter(&file);
         let markdown_content = markdown::to_html_with_options(markdown_body.as_str(), &Options {
@@ -132,7 +138,7 @@ fn retrieve_frontmatter(source: &str) -> (Option<Frontmatter>, String) {
         if line.trim() == "---" { break; }
         fmt_lines.push(line);
     }
-    
+
     let body = lines.collect::<Vec<_>>().join("\n");
     let fmt_text = fmt_lines.join("\n");
 
@@ -146,7 +152,7 @@ fn retrieve_frontmatter(source: &str) -> (Option<Frontmatter>, String) {
 }
 
 pub fn is_potential_opt_file(uri: &str) -> bool {
-    uri.ends_with(".png") || uri.ends_with(".jpg") || uri.ends_with(".gif") || 
+    uri.ends_with(".png") || uri.ends_with(".jpg") || uri.ends_with(".gif") ||
     uri.ends_with(".webp") || uri.ends_with(".opus")
 }
 
@@ -157,9 +163,9 @@ fn create_dummy_page() -> Page {
         id: String::from("test-page"),
         date: Some("2069-01-01".parse().unwrap()),
         frontmatter: Frontmatter {
-            title: String::from("This is a test"), 
-            description: String::from("This is only a test"), 
-            slug: None, 
+            title: String::from("This is a test"),
+            description: String::from("This is only a test"),
+            slug: None,
             draft: Some(true),
             tags: Some(vec!["test".to_string(), "oh_yeah".to_string()]),
             extra: Some(vec![("Is this a test?".to_string(), "*HL1 Announcer Voice* Yes".to_string())]),

@@ -2,26 +2,8 @@ use crate::config::BLAIR;
 use actix_web::{App, HttpServer, dev::Server, middleware, web};
 use std::net::TcpListener;
 use lazy_static::lazy_static;
-use std::sync::{Arc, RwLock};
 
-use crate::renderer::pages::YLMode;
-
-lazy_static! {
-    pub static ref PAGE_COLLECTION: Arc<RwLock<Vec<crate::renderer::pages::Page>>> = 
-        Arc::new(
-            RwLock::new(
-                crate::renderer::pages::yooka_laylee(YLMode::Page)
-            )
-        );
-    pub static ref BLOG_COLLECTION: Arc<RwLock<Vec<crate::renderer::pages::Page>>> = 
-        Arc::new(
-            RwLock::new(
-                crate::renderer::pages::yooka_laylee(YLMode::Blog)
-            )
-        );
-
-    pub static ref BLAIR_CONFIG: crate::config::Configuration = crate::config::init();
-}
+lazy_static! { pub static ref BLAIR_CONFIG: crate::config::Configuration = crate::config::init(); }
 
 pub fn launch() -> Result<Server, std::io::Error> {
     // let listener = TcpListener::bind(config::Configuration::get_listener())?;

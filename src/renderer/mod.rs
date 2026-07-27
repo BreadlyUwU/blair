@@ -1,8 +1,8 @@
-use crate::config::{BLAIR, RunningMode};
-use crate::server::{PAGE_COLLECTION, BLOG_COLLECTION};
 pub mod errors;
 pub mod pages;
 mod functions;
+use crate::config::{BLAIR, RunningMode};
+use crate::renderer::pages::{BLOG_COLLECTION, PAGE_COLLECTION};
 
 use functions::BlairStandardFunctions;
 use actix_web::{
@@ -46,7 +46,7 @@ functions::load_BlairStandardFunctions!(PageTemplate);
 pub async fn blog_posts(req: HttpRequest) -> impl Responder {
     let uri = req.match_info().get("uri").unwrap();
     let normal_uri = if uri.ends_with("/") { uri.split_at(uri.len() - 1).0 } else { uri };
-    let posts = &BLOG_COLLECTION.read().unwrap();
+    let posts = &BLOG_COLLECTION;
 
     // Verifie en premier si la requête porte vers un fichier se trouvant à l'intérieur
     // du dossier dédié à la page et le renvoi le cas échéant
@@ -56,15 +56,15 @@ pub async fn blog_posts(req: HttpRequest) -> impl Responder {
             Ok(file) => file.into_response(&req),
             Err(_) => _404Error!()
         }
-    } 
+    }
     else {
         match posts.iter().find(|posts| posts.id == normal_uri) {
             Some(post) => {
                 let template = PageTemplate { page: post.clone() };
                 if post.frontmatter.draft == Some(true) && let RunningMode::Production = &BLAIR.running_mode { _404Error!() }
                 else {
-                    return match template.render() {           
-                        Ok(render) => { 
+                    return match template.render() {
+                        Ok(render) => {
                             // Redirection automatique pour les pages, afin que l'URL se termine systématiquement par un slash
                             // (Sinon, ça fout la merde)
                             if !uri.ends_with("/") {
@@ -73,7 +73,7 @@ pub async fn blog_posts(req: HttpRequest) -> impl Responder {
                             HttpResponse::Ok().content_type("text/html").body(render)
                         },
                         Err(e) => HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e))
-                    }    
+                    }
                 }
             },
             None => _404Error!()
@@ -86,7 +86,7 @@ pub async fn blog_posts(req: HttpRequest) -> impl Responder {
 pub async fn page(req: HttpRequest) -> impl Responder {
     let uri = req.match_info().get("uri").unwrap();
     let normal_uri = if uri.ends_with("/") { uri.split_at(uri.len() - 1).0 } else { uri };
-    let pages = &PAGE_COLLECTION.read().unwrap();
+    let pages = &PAGE_COLLECTION;
 
     // Verifie en premier si la requête porte vers un fichier se trouvant à l'intérieur
     // du dossier dédié à la page et le renvoi le cas échéant
@@ -96,13 +96,13 @@ pub async fn page(req: HttpRequest) -> impl Responder {
             Ok(file) => file.into_response(&req),
             Err(_) => _404Error!()
         }
-    } 
+    }
     else {
         match pages.iter().find(|page| page.id == normal_uri) {
             Some(page) => {
                 let template = PageTemplate { page: page.clone() };
-                return match template.render() {           
-                    Ok(render) => { 
+                return match template.render() {
+                    Ok(render) => {
                         // Redirection automatique pour les pages, afin que l'URL se termine systématiquement par un slash
                         // (Sinon, ça fout la merde)
                         if !uri.ends_with("/") {
@@ -139,4 +139,3 @@ functions::load_BlairStandardFunctions!(Err404Template);
 pub async fn _404() -> impl Responder {
     _404Error!()
 }
-
