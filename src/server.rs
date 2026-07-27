@@ -13,6 +13,12 @@ lazy_static! {
                 crate::renderer::pages::yooka_laylee(YLMode::Page)
             )
         );
+    pub static ref BLOG_COLLECTION: Arc<RwLock<Vec<crate::renderer::pages::Page>>> = 
+        Arc::new(
+            RwLock::new(
+                crate::renderer::pages::yooka_laylee(YLMode::Blog)
+            )
+        );
 
     pub static ref BLAIR_CONFIG: crate::config::Configuration = crate::config::init();
 }
