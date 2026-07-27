@@ -21,3 +21,4 @@ log = "0.4.33"
 lazy_static = "1.5.0"
 serde = { version = "1.0.229", features = ["derive"] }
 yaml_serde = "0.10.4"
+chrono = "0.4.45"

@@ -1,10 +1,10 @@
 use crate::config::BLAIR;
 use crate::config::RunningMode;
+use chrono::prelude::*;
 use fs_walk::{self, WalkOptions};
 use markdown::{CompileOptions, Options};
 use serde::Deserialize;
 use std::fs;
-
 
 const PAGES_DIR: &str = "./content/pages";
 const BLOG_DIR: &str = "./content/blog";
@@ -17,7 +17,6 @@ pub struct Frontmatter {
     pub description: String,
     pub slug: Option<String>,
     pub draft: Option<bool>,
-    pub date: Option<u32>,
     pub tags: Option<Vec<String>>,
     pub extra: Option<Vec<(String, String)>>,
 }
@@ -26,6 +25,7 @@ pub struct Frontmatter {
 #[derive(Clone)]
 pub struct Page {
     pub id: String, // <- Basically the slang, used as the endpoint: either the '.md' file folder's name, or the frontmatter's slang if present
+    pub date: Option<NaiveDate>, // Requied for blog posts, not for regular pages
     pub frontmatter: Frontmatter,
     pub content: String // <- The HTML output of the markdown parser
 }
@@ -85,14 +85,22 @@ pub fn yooka_laylee(mode: YLMode) -> Vec<Page> {
             ..Options::default()
         });
 
-        // « Arracher les ongles… »
-        let mut page = Page {
-            id: entry
+        let stringified_entry_name = entry
                 .parent()
                 .and_then(|path| path.file_name())
                 .and_then(|name| name.to_str())
                 .unwrap()
-                .to_string(),
+                .to_string();
+
+        // Récupère rapidos la date directement du nom du dossier d'origine de l'entrée, si présente
+        let post_date: Option<NaiveDate> = if stringified_entry_name.contains("_") {
+            Some(stringified_entry_name.split("_").nth(0).unwrap().parse().unwrap())
+        } else { None };
+
+        // « Arracher les ongles… »
+        let mut page = Page {
+            id: stringified_entry_name,
+            date: post_date,
             frontmatter: frontmatter.unwrap_or_default(),
             content: markdown_content.unwrap()
         };
@@ -131,14 +139,15 @@ fn retrieve_frontmatter(source: &str) -> (Option<Frontmatter>, String) {
     match yaml_serde::from_str::<Frontmatter>(&fmt_text) {
         Ok(frontmatter) => (Some(frontmatter), body),
         Err(e) => {
-            log::warn!("Error while parsing frontmatter: {}", e);
+            log::error!("Error while parsing frontmatter: {}", e);
             (None, source.to_string())
         }
     }
 }
 
 pub fn is_potential_opt_file(uri: &str) -> bool {
-    uri.ends_with(".png") || uri.ends_with(".jpg") || uri.ends_with(".gif") || uri.ends_with(".webp") || uri.ends_with(".opus")
+    uri.ends_with(".png") || uri.ends_with(".jpg") || uri.ends_with(".gif") || 
+    uri.ends_with(".webp") || uri.ends_with(".opus")
 }
 
 // For debug:
@@ -146,14 +155,14 @@ pub fn is_potential_opt_file(uri: &str) -> bool {
 fn create_dummy_page() -> Page {
     return Page {
         id: String::from("test-page"),
+        date: Some("2069-01-01".parse().unwrap()),
         frontmatter: Frontmatter {
             title: String::from("This is a test"), 
             description: String::from("This is only a test"), 
             slug: None, 
             draft: Some(true),
-            date: Some(20690101),
-            tags: Some(vec!["test".to_string()]),
-            extra: Some(vec![("Is this a test?".to_string(), "*HL1 Announcer Voice* Yes.".to_string())]),
+            tags: Some(vec!["test".to_string(), "oh_yeah".to_string()]),
+            extra: Some(vec![("Is this a test?".to_string(), "*HL1 Announcer Voice* Yes".to_string())]),
         },
         content: String::from("<img src='./assets/dreamcat.jpg' style='max-width: 30vw; display: block; float: right;'/>
 <center><audio controls src='./assets/this_is_a_test.opus' autoplay></audio></center>
