@@ -1,13 +1,6 @@
 use crate::config::BLAIR;
 use actix_web::{App, HttpServer, dev::Server, middleware, web};
-use chrono::prelude::*;
 use std::net::TcpListener;
-use lazy_static::lazy_static;
-
-lazy_static! {
-    pub static ref BLAIR_CONFIG: crate::config::Configuration = crate::config::init();
-    pub static ref START_TIME: DateTime<Local> = chrono::Local::now();
-}
 
 pub fn launch() -> Result<Server, std::io::Error> {
     // let listener = TcpListener::bind(config::Configuration::get_listener())?;

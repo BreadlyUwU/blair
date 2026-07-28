@@ -1,4 +1,5 @@
 use std::net::Ipv4Addr;
+use chrono::prelude::*;
 use lazy_static::lazy_static;
 
 pub struct Configuration {
@@ -8,6 +9,7 @@ pub struct Configuration {
     pub listening_ip: Ipv4Addr,
     pub listening_port: u16,
     pub current_base_url: String,
+    pub compile_time: DateTime<Local>,
 }
 
 pub enum RunningMode {
@@ -21,19 +23,21 @@ pub fn init() -> Configuration {
     #[cfg(not(debug_assertions))]
     let running_mode = RunningMode::Production;
 
-    let site_url: String = String::from("https://breadcat.run");
+    let site_addr: String = String::from("https://breadcat.run");
     let listening_ip: Ipv4Addr = Ipv4Addr::new(127,0,0,1);
     let listening_port: u16 = 8064;
 
     let current_base_url: String = match running_mode {
-        RunningMode::Production => String::from(&site_url),
+        RunningMode::Production => String::from(&site_addr),
         RunningMode::Debug => format!("http://{}:{}",
             &listening_ip,
             &listening_port
         ),
     };
 
-    return Configuration { running_mode, site_addr: site_url, listening_ip, listening_port, current_base_url }
+    let compile_time: DateTime<Local> = chrono::Local::now();
+
+    return Configuration { running_mode, site_addr, listening_ip, listening_port, current_base_url, compile_time }
 }
 
 lazy_static! {

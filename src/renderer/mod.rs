@@ -2,7 +2,6 @@ pub mod errors;
 pub mod pages;
 mod functions;
 use crate::config::{BLAIR, RunningMode};
-use crate::server::START_TIME;
 use crate::renderer::pages::{BLOG_COLLECTION, PAGE_COLLECTION};
 
 use functions::BlairStandardFunctions;
