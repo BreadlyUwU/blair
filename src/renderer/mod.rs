@@ -125,9 +125,7 @@ pub async fn favicon(req: HttpRequest) -> actix_web::Result<actix_files::NamedFi
     match ext {
         ".ico" => Ok(actix_files::NamedFile::open("./static/favicon.ico")?),
         ".png" => Ok(actix_files::NamedFile::open("./static/favicon.png")?),
-        // Fallback: favicon.ico | IDK how to deal with errors here
-        "" => Ok(actix_files::NamedFile::open("./static/favicon.ico")?),
-        _  => Ok(actix_files::NamedFile::open("./static/favicon.ico")?)
+        _ => Err(actix_web::error::ErrorNotFound(errors::bad_favicon(req)))
     }
 }
 

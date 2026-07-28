@@ -1,3 +1,5 @@
+use actix_web::HttpRequest;
+
 pub fn askama_error(err: askama::Error) -> String {
     return render_message(
         err.to_string(),
@@ -29,4 +31,17 @@ fn render_message(err: String, opt_message: Option<&str>) -> String {
 ", err
  , Some(opt_message).unwrap().ok_or("(No additional information supplied by the error handler)")
 );
+}
+
+pub fn bad_favicon(req: HttpRequest) -> String {
+    return format!("I'm stu,,, I'm stu,,, stu,,, I'm st…
+Ah no.
+I'm not stupid.\n
+...You are!
+You requested a favicon that doesn't exists.
+*clap* *clap* *clap*\n
+What was the favicon you thought it existed?
+{:?}?
+Oh. I'm speechless.
+", req.path().split("/").last().unwrap())
 }
