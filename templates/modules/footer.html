@@ -1,13 +1,13 @@
 <div id="footer">
     <div id="ft-left">
         <div>
-            <span><a href="https://codeberg.org/Breadly/blair">B⋅LAIR</a><br/>{{ get_version() }}</span><br/>
+            <span><a href="https://codeberg.org/Breadly/blair">B⋅LAIR</a> {{ get_version() }}</span>
         </div>
     </div>
     <div id="ft-center" title="LICENSED BY OR&#010;UNDER LICENSE FROM&#010;BREADCAT ENTERPRISES. LTD.">
         <img src="{{ get_url("/static/images/breadkitty.gif") }}">
     </div>
     <div id="ft-right">
-
+        <div><span>Last update<br/>{{ get_compile_time() }}<br/>(UTC+2 Europe/Paris)</span></div>
     </div>
 </div>

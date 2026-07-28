@@ -24,7 +24,7 @@ macro_rules! load_BlairStandardFunctions {
             }
 
             fn get_compile_time(&self) -> String {
-                return String::from("[unimplemented]")
+                return START_TIME.format("%Y/%m/%d %H:%M").to_string()
             }
 
             fn is_debug(&self) -> bool {
