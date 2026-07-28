@@ -57,17 +57,18 @@ créera une struct `Page` qui sera ensuite réutilisé par Askama pour le rendu 
 **/
 pub enum YLMode { Page, Blog }
 pub fn yooka_laylee(mode: YLMode) -> Vec<Page> {
-    let mut collection: Vec<Page> = vec![];
-
-    // Si B⋅LAIR est démarré en mode Debug, alors une page de test sera générée et accessible à l'endpoint (blog)/test-page
-    if let RunningMode::Debug = &BLAIR.running_mode { collection.push(create_dummy_page()) }
+    let mut collection: Vec<Page> = Vec::new();
 
     // Collectionite go brrr
     let walker_root = match mode {
-        YLMode::Page => WalkOptions::new()
+        YLMode::Page => {
+            // Si B⋅LAIR est démarré en mode Debug, alors une page de test sera générée et accessible à l'endpoint /test-page
+            if let RunningMode::Debug = &BLAIR.running_mode { collection.push(create_dummy_page()) }
+            WalkOptions::new()
                             .max_depth(2)
                             .ends_with(".md")
-                            .walk(PAGES_DIR),
+                            .walk(PAGES_DIR)
+        }
         YLMode::Blog => WalkOptions::new()
                             .max_depth(2)
                             .ends_with(".md")
