@@ -35,8 +35,8 @@ pub fn launch() -> Result<Server, std::io::Error> {
                     // Service de la page d'accueil
                     .service(crate::renderer::home)
 
-                    // Service des articles de blog
-                    .service(crate::renderer::blog_posts)
+                    // Service du blog
+                    .service(crate::renderer::blog)
 
                     // Service des pages potentielles
                     .service(crate::renderer::page)

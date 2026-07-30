@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+	<head>
+		<title></title>
+		<meta name="description" content="{{ description }}" />
+		<meta name="keywords" content="" />
+		<meta name="author" content="Breadly" />
+		<meta property="fediverse:rel-post" content="" />
+		<meta property="og:type" content="article" />
+		<meta property="og:title" content="{{ title }}">
+		<meta property="og:description" content="{{ description }}" />
+		<meta property="og:url" content="" />
+		<meta property="og:image" content="" />
+	</head>
+	<div id="content-box">
+		<div class="window" id="content">
+			<div class="w-titlebar">
+				<div class="w-left">
+					<a href="../"><div class="w-btn arrow" title="{{ title }}"></div></a>
+					<div class="w-title"><span>{{ title }}</span></div>
+				</div>
+				<div class="w-right">
+					<div class="w-btn minimize"></div>
+					<div class="w-btn maximize"></div>
+					<div class="w-btn close"></div>
+				</div>
+			</div>
+
+			<style>
+				#content-header { background: url("_thumbnail.gif") center right no-repeat #531515; }
+				@media (prefers-color-scheme: light) {
+					#content-header { background: url("_thumbnail.gif") center right no-repeat #ccd0da; }
+				}
+			</style>
+
+			<div id="content-header">
+				<table id="blog-post-info">
+					<thead>
+						<tr>
+							<th scope="col">Date</th>
+							<th scope="col">Category/Tags</th>
+							{# <th scope="col">Languages</th> #}
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{ date }}</td>
+							<td>{{ tags }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div id="content-body">
+				<article>
+					{{ body }}
+				</article>
+			</div>
+		</div>
+		{# \/ Placeholder, this will have to be injected by fediverse_replies.js when needed #}
+		{# <div class="window" id="fedi-replies"></div> #}
+	</div>
+	<script src="{{ get_url("/staic/js/fediverse_replies.js") }}"></script>
+{% endblock content %}

@@ -2,7 +2,7 @@ pub mod errors;
 pub mod pages;
 mod functions;
 use crate::config::{BLAIR, RunningMode};
-use crate::renderer::pages::{BLOG_COLLECTION, PAGE_COLLECTION};
+use crate::renderer::pages::{BLOG_COLLECTION, PAGE_COLLECTION, Page};
 
 use functions::BlairStandardFunctions;
 use actix_web::{
@@ -41,34 +41,54 @@ pub async fn home() -> impl Responder {
 struct PageTemplate { page: pages::Page }
 functions::load_BlairStandardFunctions!(PageTemplate);
 
-// Blog Posts
-#[get("/blog/{uri:.*}")]
-pub async fn blog_posts(req: HttpRequest) -> impl Responder {
-    let uri = req.match_info().get("uri").unwrap();
-    let normal_uri = if uri.ends_with("/") { uri.split_at(uri.len() - 1).0 } else { uri };
-    let posts = &BLOG_COLLECTION;
+// Blog
+#[derive(Template)]
+#[template(path = "blog.html")]
+struct BlogTemplate { posts: Vec<Page> }
+functions::load_BlairStandardFunctions!(BlogTemplate);
+
+#[derive(Template)]
+#[template(path = "blog-post.html")]
+struct BlogPostTemplate { post: pages::Page }
+functions::load_BlairStandardFunctions!(BlogPostTemplate);
+
+#[get("/blog{uri:.*}")]
+pub async fn blog(req: HttpRequest) -> impl Responder {
+    let uri = req.match_info().get("uri").unwrap_or("");
+    let normal_uri = &uri.trim_end_matches('/');
+
+    if uri.is_empty() || uri == "/" {
+        let template = BlogTemplate { posts: BLOG_COLLECTION.clone() };
+        match template.render() {
+            Ok(render) => {
+                if !uri.ends_with("/") {
+                    return HttpResponse::MovedPermanently().append_header(("Location", "/blog/".to_string())).finish()
+                }
+                return HttpResponse::Ok().content_type("text/html").body(render)
+            },
+            Err(e) => return HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e))
+        }
+    }
 
     // Verifie en premier si la requête porte vers un fichier se trouvant à l'intérieur
     // du dossier dédié à la page et le renvoi le cas échéant
     if pages::is_potential_opt_file(normal_uri) {
-        let expected_file = format!("./content/blog/{uri}");
+        let expected_file = format!("./content/blog/{}", normal_uri.trim_start_matches("/"));
         match actix_files::NamedFile::open(expected_file) {
             Ok(file) => file.into_response(&req),
             Err(_) => _404Error!()
         }
     }
     else {
-        match posts.iter().find(|posts| posts.id == normal_uri) {
+        match BLOG_COLLECTION.clone().iter().find(|posts| posts.id == normal_uri.trim_start_matches("/")) {
             Some(post) => {
-                let template = PageTemplate { page: post.clone() };
-                if post.frontmatter.draft == Some(true) && let RunningMode::Production = &BLAIR.running_mode { _404Error!() }
+                let template = BlogPostTemplate { post: post.clone() };
+                if post.frontmatter.draft == Some(true) && matches!(&BLAIR.running_mode, RunningMode::Production) { _404Error!() }
                 else {
                     return match template.render() {
                         Ok(render) => {
-                            // Redirection automatique pour les pages, afin que l'URL se termine systématiquement par un slash
-                            // (Sinon, ça fout la merde)
                             if !uri.ends_with("/") {
-                                return HttpResponse::MovedPermanently().append_header(("Location", format!("/{}/", normal_uri))).finish()
+                                return HttpResponse::MovedPermanently().append_header(("Location", format!("/blog{}/", normal_uri))).finish()
                             }
                             HttpResponse::Ok().content_type("text/html").body(render)
                         },
