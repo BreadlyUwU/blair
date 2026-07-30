@@ -1,13 +1,13 @@
 {% call window::draw(id="table-of-content", title="Welcome~") %}
-    <a href='{{ get_url("/") }}'' alt="Home" title="Home">
+    <a href='{{ get_url("/") }}' alt="Home" title="Home">
         <div class="item first">Home</div>
     </a>
 
-    <a href="#" alt="Blog" title="Blog">
-        <div class="item"><s>Blog</s></div>
+    <a href='{{ get_url("/blog/") }}' alt="Blog" title="Blog">
+        <div class="item">Blog</div>
     </a>
 
-    <a href='{{ get_url("/contact/") }}'' alt="Contact" title="Contact">
+    <a href='{{ get_url("/contact/") }}' alt="Contact" title="Contact">
         <div class="item">Contact</div>
     </a>
 
