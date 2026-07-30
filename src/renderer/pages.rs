@@ -1,19 +1,15 @@
-use crate::config::BLAIR;
-use crate::config::RunningMode;
-use chrono::prelude::*;
+use crate::config::{BLAIR, RunningMode};
+use std::{fs, sync::LazyLock};
 use fs_walk::{self, WalkOptions};
-use lazy_static::lazy_static;
+use chrono::prelude::*;
 use markdown::{CompileOptions, Options};
 use serde::Deserialize;
-use std::fs;
 
 const PAGES_DIR: &str = "./content/pages";
 const BLOG_DIR: &str = "./content/blog";
 
-lazy_static! {
-    pub static ref PAGE_COLLECTION: Vec<Page> = yooka_laylee(YLMode::Page);
-    pub static ref BLOG_COLLECTION: Vec<Page> = yooka_laylee(YLMode::Blog);
-}
+pub static PAGE_COLLECTION: LazyLock<Vec<Page>> = LazyLock::new(|| yooka_laylee(YLMode::Page));
+pub static BLOG_COLLECTION: LazyLock<Vec<Page>> = LazyLock::new(|| yooka_laylee(YLMode::Blog));
 
 #[allow(dead_code)]
 #[derive(Clone, Default, Deserialize)]

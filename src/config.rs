@@ -1,6 +1,5 @@
-use std::net::Ipv4Addr;
+use std::{net::Ipv4Addr, sync::LazyLock};
 use chrono::prelude::*;
-use lazy_static::lazy_static;
 
 pub struct Configuration {
     // site_name: Option<String>,
@@ -40,6 +39,4 @@ pub fn init() -> Configuration {
     return Configuration { running_mode, site_addr, listening_ip, listening_port, current_base_url, compile_time }
 }
 
-lazy_static! {
-    pub static ref BLAIR: Configuration = crate::config::init();
-}
+pub static BLAIR: LazyLock<Configuration> = LazyLock::new(|| crate::config::init());
