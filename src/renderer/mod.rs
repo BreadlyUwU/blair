@@ -38,27 +38,26 @@ pub async fn home() -> impl Responder {
 
 #[derive(Template)]
 #[template(path = "page.html")]
-struct PageTemplate { page: pages::Page }
-functions::load_BlairStandardFunctions!(PageTemplate);
+struct PageTemplate<'a> { page: &'a Page }
+functions::load_BlairStandardFunctions!(PageTemplate<'_>);
 
-// Blog
 #[derive(Template)]
 #[template(path = "blog.html")]
-struct BlogTemplate { posts: Vec<Page> }
-functions::load_BlairStandardFunctions!(BlogTemplate);
+struct BlogTemplate<'a> { posts: &'a [Page] }
+functions::load_BlairStandardFunctions!(BlogTemplate<'_>);
 
 #[derive(Template)]
 #[template(path = "blog-post.html")]
-struct BlogPostTemplate { post: pages::Page }
-functions::load_BlairStandardFunctions!(BlogPostTemplate);
+struct BlogPostTemplate<'a> { post: &'a Page }
+functions::load_BlairStandardFunctions!(BlogPostTemplate<'_>);
 
 #[get("/blog{uri:.*}")]
 pub async fn blog(req: HttpRequest) -> impl Responder {
     let uri = req.match_info().get("uri").unwrap_or("");
-    let normal_uri = &uri.trim_end_matches('/');
+    let normal_uri = uri.trim_end_matches('/');
 
     if uri.is_empty() || uri == "/" {
-        let template = BlogTemplate { posts: BLOG_COLLECTION.clone() };
+        let template = BlogTemplate { posts: &BLOG_COLLECTION };
         match template.render() {
             Ok(render) => {
                 if !uri.ends_with("/") {
@@ -80,9 +79,9 @@ pub async fn blog(req: HttpRequest) -> impl Responder {
         }
     }
     else {
-        match BLOG_COLLECTION.clone().iter().find(|posts| posts.id == normal_uri.trim_start_matches("/")) {
+        match BLOG_COLLECTION.iter().find(|post| post.id == normal_uri.trim_start_matches("/")) {
             Some(post) => {
-                let template = BlogPostTemplate { post: post.clone() };
+                let template = BlogPostTemplate { post };
                 if post.frontmatter.draft == Some(true) && matches!(&BLAIR.running_mode, RunningMode::Production) { _404Error!() }
                 else {
                     return match template.render() {
@@ -120,7 +119,7 @@ pub async fn page(req: HttpRequest) -> impl Responder {
     else {
         match pages.iter().find(|page| page.id == normal_uri) {
             Some(page) => {
-                let template = PageTemplate { page: page.clone() };
+                let template = PageTemplate { page };
                 return match template.render() {
                     Ok(render) => {
                         // Redirection automatique pour les pages, afin que l'URL se termine systématiquement par un slash
