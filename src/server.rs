@@ -27,7 +27,7 @@ pub fn launch() -> Result<Server, std::io::Error> {
 
                     // Service des fichiers statiques
                     .service(
-                        actix_files::Files::new("/static", "static/")
+                        actix_files::Files::new("/static", "./content/static/")
                             //.show_files_listing()
                             .use_last_modified(true),
                     )
