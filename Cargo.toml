@@ -1,6 +1,6 @@
 [package]
 name = "blair"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2024"
 
 # [profile.release]
@@ -21,3 +21,4 @@ log = "0.4.33"
 serde = { version = "1.0.229", features = ["derive"] }
 yaml_serde = "0.10.4"
 chrono = "0.4.45"
+atom_syndication = "0.12.10"

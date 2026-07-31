@@ -1,3 +1,4 @@
+pub mod atom;
 pub mod errors;
 pub mod pages;
 mod functions;

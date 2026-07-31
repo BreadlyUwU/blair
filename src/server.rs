@@ -35,6 +35,9 @@ pub fn launch() -> Result<Server, std::io::Error> {
                     // Service de la page d'accueil
                     .service(crate::renderer::home)
 
+                    // Service du flux Atom du blog
+                    .service(crate::renderer::atom::feed)
+
                     // Service du blog
                     .service(crate::renderer::blog)
 
