@@ -32,17 +32,14 @@ pub fn launch() -> Result<Server, std::io::Error> {
                             .use_last_modified(true),
                     )
 
-                    // Service de la page d'accueil
-                    .service(crate::renderer::home)
-
                     // Service du flux Atom du blog
                     .service(crate::renderer::atom::feed)
 
                     // Service du blog
                     .service(crate::renderer::blog)
 
-                    // Service des pages potentielles
-                    .service(crate::renderer::page)
+                    // Service du root (sert la homepage et les… p-a-g-i-e-s 📃📃📃)
+                    .service(crate::renderer::root)
 
                     //.Error 404
                     .default_service(web::route().to(crate::renderer::_404))
