@@ -1,10 +1,11 @@
 {% macro draw(
-    id="", 
+    id="",
+    style="",
     back = false, 
     title = "-3-", 
     beat = false
 ) -%}
-    <div class="window" id="{{id}}">
+    <div class='window' id='{{id}}' {% if style != ""%}style='{{style}}'{% endif %}>
         <div class="w-titlebar">
             <div class="w-left">
                 {% if back == true %}<a href="javascript:window.history.back();"><div class="w-btn arrow" title="Back"></div></a>{% endif %}
