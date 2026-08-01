@@ -76,7 +76,7 @@ pub fn yooka_laylee(mode: YLMode) -> Vec<Page> {
         log::debug!("Reading page: {:?}", entry);
 
         // « Lui sucer les yeux… »
-        let file: String = fs::read_to_string(&entry).unwrap();
+        let file: String = fs::read_to_string(&entry).expect("The markdown file cannot be read. Why? Good luck finding out why.");
 
         // « Le retourner comme un gant… »
         let (frontmatter, markdown_body) = retrieve_frontmatter(&file);
@@ -97,7 +97,7 @@ pub fn yooka_laylee(mode: YLMode) -> Vec<Page> {
 
         // Récupère rapidos la date directement du nom du dossier d'origine de l'entrée, si présente
         let post_date: Option<NaiveDate> = if stringified_entry_name.contains("_") {
-            Some(stringified_entry_name.split("_").nth(0).unwrap().parse().unwrap())
+            Some(stringified_entry_name.split("_").nth(0).unwrap_or_default().parse().unwrap_or_default())
         } else { None };
 
         // « Arracher les ongles… »
@@ -105,7 +105,7 @@ pub fn yooka_laylee(mode: YLMode) -> Vec<Page> {
             id: stringified_entry_name,
             date: post_date,
             frontmatter: frontmatter.unwrap_or_default(),
-            content: markdown_content.unwrap()
+            content: markdown_content.expect("How can you fuck up that much a markdown file like you just did, explain to me please, it's surreal")
         };
 
         // Voilà la partie du programme qui sera la plus probablement inutile
@@ -128,7 +128,7 @@ fn retrieve_frontmatter(source: &str) -> (Option<Frontmatter>, String) {
     }
 
     let mut lines = trim.lines();
-    let _opening_delimiter = lines.next();
+    lines.next();
 
     let mut fmt_lines = Vec::new();
     for line in lines.by_ref() {
@@ -158,7 +158,7 @@ pub fn is_potential_opt_file(uri: &str) -> bool {
 fn create_dummy_page() -> Page {
     return Page {
         id: String::from("test-page"),
-        date: Some("2069-01-01".parse().unwrap()),
+        date: Some("2069-01-01".parse().unwrap_or_default()),
         frontmatter: Frontmatter {
             title: String::from("This is a test"),
             description: String::from("This is only a test"),
