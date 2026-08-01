@@ -4,7 +4,7 @@ use chrono::prelude::*;
 pub struct Configuration {
     // site_name: Option<String>,
     pub running_mode: RunningMode,
-    pub site_addr: String,
+    pub site_addr: &'static str,
     pub listening_ip: Ipv4Addr,
     pub listening_port: u16,
     pub current_base_url: String,
@@ -22,16 +22,13 @@ pub fn init() -> Configuration {
     #[cfg(not(debug_assertions))]
     let running_mode = RunningMode::Production;
 
-    let site_addr: String = String::from("https://breadcat.run");
+    let site_addr = "https://breadcat.run";
     let listening_ip: Ipv4Addr = Ipv4Addr::new(127,0,0,1);
     let listening_port: u16 = 8064;
 
     let current_base_url: String = match running_mode {
-        RunningMode::Production => String::from(&site_addr),
-        RunningMode::Debug => format!("http://{}:{}",
-            &listening_ip,
-            &listening_port
-        ),
+        RunningMode::Production => String::from(site_addr),
+        RunningMode::Debug => format!("http://{}:{}", &listening_ip, &listening_port),
     };
 
     let compile_time: DateTime<Local> = chrono::Local::now();
