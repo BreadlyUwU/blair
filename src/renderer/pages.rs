@@ -148,10 +148,7 @@ fn retrieve_frontmatter(source: &str) -> (Option<Frontmatter>, String) {
     }
 }
 
-pub fn is_potential_opt_file(uri: &str) -> bool {
-    uri.ends_with(".png") || uri.ends_with(".jpg") || uri.ends_with(".gif") ||
-    uri.ends_with(".webp") || uri.ends_with(".opus")
-}
+pub fn is_potential_opt_file(uri: &str) -> bool { uri.contains(".") && !uri.ends_with(".md")}
 
 // For debug:
 #[allow(dead_code)]
