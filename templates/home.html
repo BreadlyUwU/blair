@@ -4,13 +4,28 @@
 		<title>Breadcat's Lair</title>
 		<meta name="description" content="UwU~" />
 	</head>
-	{% call window::draw(id="content", title="B:\\") %}
-		<article>
-			<h1>Oh, ooooh!</h1>
-			<h3>Welcome!</h3>
-			<p>This is my website!</p>
-			<p>But it is currently under a very… <b>very…</b> huge rework.</p>
-			<p>Please come back later!~ ❤️</p>
-		</article>
-	{% endcall %}
+	<div id="content-box-wide">
+		{% call window::draw(id="content", title="B:\\") %}
+			<article>
+				<h1>Oh, ooooh!</h1>
+				<h3>Welcome!</h3>
+				<p>This is my website!</p>
+				<p>But it is currently under a very… <b>very…</b> huge rework.</p>
+				<p>Please come back later!~ ❤️</p>
+			</article>
+		{% endcall %}
+	</div>
+	
+	{% if is_debug() == true %}
+	<div id="sidebar-right">
+		{% call window::draw(id="gts-status", title="Wat") %}
+			<div style="height: 60px; background: left / auto no-repeat url('./static/images/catjam.gif');"></div>
+		{% endcall %}
+		{% call window::draw(id="", title="???", ) %}
+			<h1>Oh!</h1>
+			<p>Another one window???</p>
+			<p>No fucking way!</p>
+		{% endcall %}		
+	</div>
+	{% endif %}
 {% endblock content %}
