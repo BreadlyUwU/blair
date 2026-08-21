@@ -20,6 +20,8 @@ pub struct Frontmatter {
     pub slug: Option<String>,
     pub updated: Option<String>,
     pub draft: Option<bool>,
+    pub ap_link: Option<String>,
+    pub at_link: Option<String>,
     pub tags: Option<Vec<String>>,
     pub extra: Option<Vec<(String, String)>>,
 }
@@ -164,6 +166,7 @@ fn create_dummy_page() -> Page {
             draft: Some(true),
             tags: Some(vec!["test".to_string(), "oh_yeah".to_string()]),
             extra: Some(vec![("Is this a test?".to_string(), "*HL1 Announcer Voice* Yes".to_string())]),
+            ..Default::default()
         },
         content: String::from("<img src='./assets/dreamcat.jpg' style='max-width: 30vw; display: block; float: right;'/>
 <center><audio controls src='./assets/this_is_a_test.opus' autoplay></audio></center>
