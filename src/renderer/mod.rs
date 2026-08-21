@@ -2,9 +2,9 @@ pub mod atom;
 pub mod errors;
 pub mod pages;
 mod functions;
-use functions::BlairStandardFunctions;
 use crate::config::{BLAIR, RunningMode};
-use crate::renderer::pages::{BLOG_COLLECTION, PAGE_COLLECTION, Page};
+use pages::{BLOG_COLLECTION, PAGE_COLLECTION, Page};
+use functions::BlairStandardFunctions;
 
 use actix_web::{
     error::ErrorNotFound,
