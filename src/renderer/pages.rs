@@ -18,6 +18,7 @@ pub struct Frontmatter {
     pub title: String,
     pub description: String,
     pub slug: Option<String>,
+    pub updated: Option<String>,
     pub draft: Option<bool>,
     pub tags: Option<Vec<String>>,
     pub extra: Option<Vec<(String, String)>>,
@@ -159,7 +160,7 @@ fn create_dummy_page() -> Page {
         frontmatter: Frontmatter {
             title: String::from("This is a test"),
             description: String::from("This is only a test"),
-            slug: None,
+            updated: Some(String::from("2026-08-16")),
             draft: Some(true),
             tags: Some(vec!["test".to_string(), "oh_yeah".to_string()]),
             extra: Some(vec![("Is this a test?".to_string(), "*HL1 Announcer Voice* Yes".to_string())]),
