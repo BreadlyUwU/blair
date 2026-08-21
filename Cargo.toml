@@ -11,14 +11,14 @@ edition = "2024"
 # panic = "abort"
 
 [dependencies]
-actix-files = "0.6.10"
-actix-web = "4.14.0"
+actix-files = "0.7.0"
+actix-web = "4.14.1"
 askama = { version = "0.16.0", default-features = false, features = ["derive", "std"] }
 markdown = "1.0.0"
 fs-walk = { version = "0.2.2", features = ["regex"] }
 env_logger = "0.11.11"
 log = "0.4.33"
 serde = { version = "1.0.229", features = ["derive"] }
-yaml_serde = "0.10.4"
+yaml_serde = "0.10.7"
 chrono = "0.4.45"
 atom_syndication = "0.12.10"
