@@ -22,6 +22,7 @@ serde = { version = "1.0.229", features = ["derive"] }
 yaml_serde = "0.10.7"
 chrono = "0.4.45"
 atom_syndication = "0.12.10"
+rayon = "1.12.0"
 
 [profile.dev]
 debug = "line-tables-only"

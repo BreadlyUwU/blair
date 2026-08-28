@@ -4,6 +4,7 @@ use fs_walk::{self, WalkOptions};
 use chrono::prelude::*;
 use markdown::{CompileOptions, Options};
 use serde::Deserialize;
+use rayon::prelude::*;
 
 const PAGES_DIR: &str = "./content/pages";
 const BLOG_DIR: &str = "./content/blog";
@@ -63,6 +64,7 @@ pub fn yooka_laylee(mode: YLMode) -> Vec<Page> {
         YLMode::Page => {
             // Si B⋅LAIR est démarré en mode Debug, alors une page de test sera générée et accessible à l'endpoint /test-page
             if let RunningMode::Debug = &BLAIR.running_mode { collection.push(create_dummy_page()) }
+            // Et let's get back to business
             WalkOptions::new()
                             .max_depth(2)
                             .ends_with(".md")
@@ -75,51 +77,61 @@ pub fn yooka_laylee(mode: YLMode) -> Vec<Page> {
     };
 
     // Parse le fichier markdown trouvé pour le dégraisser comme un niveau de DK64
-    for entry in walker_root.flatten() {
-        log::debug!("Reading page: {:?}", entry);
+    let parsed_pages: Vec<Page> = walker_root
+        .flatten()
+        .par_bridge()
+        .map(|entry| {
+            log::debug!("Reading page: {:?}", entry);
 
-        // « Lui sucer les yeux… »
-        let file: String = fs::read_to_string(&entry).expect("The markdown file cannot be read. Why? Good luck finding out why.");
+            // « Lui sucer les yeux… »
+            let file: String = fs::read_to_string(&entry).expect("The markdown file cannot be read. Why? Good luck finding out why.");
 
-        // « Le retourner comme un gant… »
-        let (frontmatter, markdown_body) = retrieve_frontmatter(&file);
-        let markdown_content = markdown::to_html_with_options(markdown_body.as_str(), &Options {
-            compile: CompileOptions {
-                allow_dangerous_html: true,
-                ..CompileOptions::default()
-            },
-            ..Options::default()
-        });
+            // « Le retourner comme un gant… »
+            let (frontmatter, markdown_body) = retrieve_frontmatter(&file);
+            let markdown_content = markdown::to_html_with_options(markdown_body.as_str(), &Options {
+                compile: CompileOptions {
+                    allow_dangerous_html: true,
+                    ..CompileOptions::default()
+                },
+                ..Options::default()
+            });
 
-        let stringified_entry_name = entry
+            let stringified_entry_name = entry
                 .parent()
                 .and_then(|path| path.file_name())
                 .and_then(|name| name.to_str())
                 .unwrap()
                 .to_string();
 
-        // Récupère rapidos la date directement du nom du dossier d'origine de l'entrée, si présente
-        let post_date: Option<NaiveDate> = if stringified_entry_name.contains("_") {
-            Some(stringified_entry_name.split("_").nth(0).unwrap_or_default().parse().unwrap_or_default())
-        } else { None };
+            // Récupère rapidos la date directement du nom du dossier d'origine de l'entrée, si présente
+            let post_date: Option<NaiveDate> = if stringified_entry_name.contains("_") {
+                Some(stringified_entry_name.split("_").nth(0).unwrap_or_default().parse().unwrap_or_default())
+            } else { None };
 
-        // « Arracher les ongles… »
-        let mut page = Page {
-            id: stringified_entry_name,
-            date: post_date,
-            frontmatter: frontmatter.unwrap_or_default(),
-            content: markdown_content.expect("How can you fuck up that much a markdown file like you just did, explain to me please, it's surreal")
-        };
+            // « Arracher les ongles… »
+            let mut page = Page {
+                id: stringified_entry_name,
+                date: post_date,
+                frontmatter: frontmatter.unwrap_or_default(),
+                content: markdown_content.expect("How can you fuck up that much a markdown file like you just did, explain to me please, it's surreal")
+            };
 
-        // Voilà la partie du programme qui sera la plus probablement inutile
-        if let Some(slug) = &page.frontmatter.slug {
-            page.id = slug.clone();
-        }
+            // Voilà la partie du programme qui sera la plus probablement inutile
+            if let Some(slug) = &page.frontmatter.slug {
+                page.id = slug.clone();
+            }
 
-        // « Laissez-le courir, viande meilleure avec du sel ! »
-        log::debug!("Parsing of \"{}\" completed, sending to the collection", &page.id);
-        collection.push(page)
-    };
+            // « Laissez-le courir, viande meilleure avec du sel ! »
+            log::debug!("Parsing of \"{}\" completed, sending to the collection", &page.id);
+            page
+        }).collect();
+
+    collection.extend(parsed_pages);
+
+    // Si yooka_laylee roule pour le blog, à la fin du parsing trie les entrées par date
+    if let YLMode::Blog = mode {
+        collection.sort_by(|left, right| right.date.cmp(&left.date));
+    }
 
     return collection
 }
@@ -151,7 +163,7 @@ fn retrieve_frontmatter(source: &str) -> (Option<Frontmatter>, String) {
     }
 }
 
-pub fn is_potential_opt_file(uri: &str) -> bool { uri.contains(".") && !uri.ends_with(".md")}
+pub fn is_potential_opt_file(uri: &str) -> bool { uri.contains(".") && !uri.ends_with(".md") }
 
 // For debug:
 #[allow(dead_code)]
