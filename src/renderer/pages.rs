@@ -138,9 +138,7 @@ pub fn yooka_laylee(mode: YLMode) -> Vec<Page> {
 
 fn retrieve_frontmatter(source: &str) -> (Option<Frontmatter>, String) {
     let trim = source.trim_start();
-    if !trim.starts_with("---") {
-        return (None, trim.to_string());
-    }
+    if !trim.starts_with("---") { return (None, source.to_string()); }
 
     let mut lines = trim.lines();
     lines.next();
@@ -152,9 +150,8 @@ fn retrieve_frontmatter(source: &str) -> (Option<Frontmatter>, String) {
     }
 
     let body = lines.collect::<Vec<_>>().join("\n");
-    let fmt_text = fmt_lines.join("\n");
 
-    match yaml_serde::from_str::<Frontmatter>(&fmt_text) {
+    match yaml_serde::from_str::<Frontmatter>(&fmt_lines.join("\n")) {
         Ok(frontmatter) => (Some(frontmatter), body),
         Err(e) => {
             log::error!("Error while parsing frontmatter: {}", e);
