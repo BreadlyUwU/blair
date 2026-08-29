@@ -130,7 +130,7 @@ pub fn yooka_laylee(mode: YLMode) -> Vec<Page> {
 
     // Si yooka_laylee roule pour le blog, à la fin du parsing trie les entrées par date
     if let YLMode::Blog = mode {
-        collection.sort_by(|left, right| right.date.cmp(&left.date));
+        collection.par_sort_by(|left, right| right.date.cmp(&left.date));
     }
 
     return collection
