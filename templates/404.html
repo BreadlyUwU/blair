@@ -3,8 +3,9 @@
 	<head>
 		<title>There's nothing for you in this place</title>
 	</head>
-	{% call window::draw(back = true, title = "HTML 404 - Not Found") %}
-		<style>.window {max-width:100%; max-height: fit-content; margin: auto;}</style>
-		<img src="{{ get_url("/static/images/404.gif") }}" style="max-width: inherit;">
-	{% endcall %}
+	<div id="content-box" style="margin: auto;">
+		{% call window::draw(back = true, title = "HTML 404 - Not Found") %}
+			<img src="{{ get_url("/static/images/404.gif") }}" style="max-width: inherit;">
+		{% endcall %}
+	</div>
 {% endblock %}
