@@ -16,8 +16,8 @@ async fn main() -> std::io::Result<()> {
     println!(
         "- Version: \x1b[1m{}\x1b[0m\n- Mode: {}\n",
         env!("CARGO_PKG_VERSION"),
-        match BLAIR.running_mode {
-            crate::config::RunningMode::Debug => "\x1b[1m\x1b[31mDebug (°o°)\x1b[0m",
+        match &BLAIR.running_mode {
+            crate::config::RunningMode::Debug      => "\x1b[1m\x1b[31mDebug (°o°)\x1b[0m",
             crate::config::RunningMode::Production => "\x1b[1m\x1b[32mRelease (^_^)\x1b[0m",
         }
     );
