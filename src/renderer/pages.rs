@@ -140,7 +140,10 @@ pub fn yooka_laylee(mode: YLMode) -> Vec<Page> {
             }
 
             // « Laissez-le courir, viande meilleure avec du sel ! »
-            log::debug!("Parsing of \"{}\" completed, sending to the collection", &page.id);
+            log::debug!("Parsing of \"{}\" completed, sending to the collection", 
+                if page.id == page.root { page.id.clone() }
+                else { format!("{}/{}", &page.root, &page.id) }
+            );
             page
         }).collect();
 
