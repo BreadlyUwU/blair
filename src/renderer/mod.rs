@@ -76,11 +76,8 @@ pub async fn root(req: HttpRequest) -> impl Responder {
                             // Redirection automatique pour les pages, afin que l'URL se termine systématiquement par un slash
                             // (Sinon, ça fout la merde)
                             if !uri.ends_with("/") {
-                                let canonical_path = if page.id == normal_uri {
-                                    format!("/{}", normal_uri)
-                                } else {
-                                    format!("/{}/{}", page.root, page.id)
-                                };
+                                let canonical_path = if page.id == normal_uri { format!("/{}", normal_uri) }
+                                                     else { format!("/{}/{}", page.root, page.id) };
                                 return HttpResponse::MovedPermanently().append_header(("Location", format!("{canonical_path}/"))).finish()
                             }
                             HttpResponse::Ok().content_type("text/html").body(render)
