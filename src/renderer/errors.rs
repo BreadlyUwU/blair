@@ -37,7 +37,7 @@ pub fn bad_favicon(req: HttpRequest) -> String {
     return format!("I'm stu,,, I'm stu,,, stu,,, I'm st…
 Ah no.
 I'm not stupid.\n
-...You are!
+...You are!\n
 You requested a favicon that doesn't exists.
 *clap* *clap* *clap*\n
 What was the favicon you thought it existed?

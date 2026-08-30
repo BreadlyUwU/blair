@@ -31,9 +31,17 @@ pub struct Frontmatter {
 #[derive(Clone)]
 pub struct Page {
     pub id: String, // <- Basically the slang, used as the endpoint: either the '.md' file folder's name, or the frontmatter's slang if present
+    pub root: String,
     pub date: Option<NaiveDate>, // Requied for blog posts, not for regular pages
     pub frontmatter: Frontmatter,
     pub content: String // <- The HTML output of the markdown parser
+}
+
+impl Page {
+    pub fn are_uri_and_id_kissing(&self, uri: &str) -> bool {
+        if self.root == self.id { return self.id == uri; }
+        format!("{}/{}", self.root, self.id) == uri
+    }
 }
 
 /**
@@ -95,22 +103,32 @@ pub fn yooka_laylee(mode: YLMode) -> Vec<Page> {
                 },
                 ..Options::default()
             });
-
-            let stringified_entry_name = entry
+            
+            let parent_folder = entry
                 .parent()
                 .and_then(|path| path.file_name())
                 .and_then(|name| name.to_str())
                 .unwrap()
                 .to_string();
+            
+            let entry_name = if entry.file_name().unwrap() == "index.md" { parent_folder.clone() } else {
+                entry
+                    .file_prefix()
+                    .and_then(|name| name
+                    .to_str())
+                    .unwrap()
+                    .to_string()
+            };
 
             // Récupère rapidos la date directement du nom du dossier d'origine de l'entrée, si présente
-            let post_date: Option<NaiveDate> = if stringified_entry_name.contains("_") {
-                Some(stringified_entry_name.split("_").nth(0).unwrap_or_default().parse().unwrap_or_default())
+            let post_date: Option<NaiveDate> = if entry_name.contains("_") {
+                Some(entry_name.split("_").nth(0).unwrap_or_default().parse().unwrap_or_default())
             } else { None };
 
             // « Arracher les ongles… »
             let mut page = Page {
-                id: stringified_entry_name,
+                id: entry_name,
+                root: parent_folder,
                 date: post_date,
                 frontmatter: frontmatter.unwrap_or_default(),
                 content: markdown_content.expect("How can you fuck up that much a markdown file like you just did, explain to me please, it's surreal")
@@ -167,6 +185,7 @@ pub fn is_potential_opt_file(uri: &str) -> bool { uri.contains(".") && !uri.ends
 fn create_dummy_page() -> Page {
     return Page {
         id: String::from("test-page"),
+        root: String::from("test-page"),
         date: Some("2069-01-01".parse().unwrap_or_default()),
         frontmatter: Frontmatter {
             title: String::from("This is a test"),
