@@ -52,39 +52,39 @@
 		{# ================ #}
 		{# = THE REAL ONE = #}
 		{# ================ #}
-		
+
 		{% call window::draw(id="content", back=true, title="Journal of the Breadcat") %}
 			{% for post in posts %}
 				{% if post.frontmatter.draft != Some(true) %}
 					<div id="blog-list-item">
-					<a href="{{ post.id }}">
-						<div id="blog-entry">
-							<div id="blog-entry-thumbnail">
-								<img src="{{ post.id }}/_thumbnail.gif"/>
-							</div>
-							<div id="blog-entry-info">
-								<div id="blog-entry-top">
-									<div id="blog-entry-title">
-										<span>{{ post.frontmatter.title }}</span>
-									</div>
-									<div id="blog-entry-date">
-										{% if let Some(date) = post.date %}<span>{{ date }}</span>{% endif %}
-									</div>
-								</div>
-								<div id="blog-entry-bot">
-									<div id="blog-entry-description">
-										<span>{{ post.frontmatter.description }}</span>
-									</div>
-									<div id="blog-entry-tags">
-										{% if let Some(tags) = post.frontmatter.tags %}
-											{% for tag in tags %}<span>{{ tag }}</span> {% endfor %}
-										{% endif %}
-									</div>
-								</div>
-							</div>
-						</div>
-					</a>
-				</div>
+    					<a href="{{ post.id }}">
+    						<div id="blog-entry">
+    							<div id="blog-entry-thumbnail">
+    								<img src="{{ post.id }}/_thumbnail.gif"/>
+    							</div>
+    							<div id="blog-entry-info">
+    								<div id="blog-entry-top">
+    									<div id="blog-entry-title">
+    										<span>{{ post.frontmatter.title }}</span>
+    									</div>
+    									<div id="blog-entry-date">
+    										{% if let Some(date) = post.date %}<span>{{ date }}</span>{% endif %}
+    									</div>
+    								</div>
+    								<div id="blog-entry-bot">
+    									<div id="blog-entry-description">
+    										<span>{{ post.frontmatter.description }}</span>
+    									</div>
+    									<div id="blog-entry-tags">
+    										{% if let Some(tags) = post.frontmatter.tags %}
+    											{% for tag in tags %}<span>{{ tag }}</span> {% endfor %}
+    										{% endif %}
+    									</div>
+    								</div>
+    							</div>
+    						</div>
+    					</a>
+					</div>
 				{% endif %}
 			{% endfor %}
 		{% endcall %}
