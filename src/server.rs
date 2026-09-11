@@ -10,14 +10,8 @@ pub fn launch() -> Result<Server, std::io::Error> {
             let server = HttpServer::new(move || {
                 App::new()
                     .wrap(middleware::Logger::default())
-                    // ↓ Désactivé car foutait la merde avec la redirection automatique
-                    // .wrap(middleware::NormalizePath::new(
-                    //     middleware::TrailingSlash::Trim,
-                    // ))
-
                     // ATTENTION: Mettre les points d'entrés statiques EN PREMIER
-                    // Sinon ils sont écrasés par les endpoints dynamiques
-                    // (typiquement "pages" et "blog-posts")
+                    // Sinon ils sont écrasés par les endpoints dynamiques (typiquement "pages" et "blog-posts")
 
                     // Service du health-check
                     .service(crate::health::check)

@@ -12,7 +12,6 @@ const BLOG_DIR: &str = "./content/blog";
 pub static PAGE_COLLECTION: LazyLock<Vec<Page>> = LazyLock::new(|| yooka_laylee(YLMode::Page));
 pub static BLOG_COLLECTION: LazyLock<Vec<Page>> = LazyLock::new(|| yooka_laylee(YLMode::Blog));
 
-#[allow(dead_code)]
 #[derive(Clone, Default, Deserialize)]
 #[serde(default)]
 pub struct Frontmatter {
@@ -27,7 +26,6 @@ pub struct Frontmatter {
     pub extra: Option<Vec<(String, String)>>,
 }
 
-#[allow(dead_code)]
 #[derive(Clone)]
 pub struct Page {
     pub id: String, // <- Basically the slang, used as the endpoint: either the '.md' file folder's name, or the frontmatter's slang if present
@@ -44,6 +42,7 @@ impl Page {
     }
 }
 
+pub enum YLMode { Page, Blog }
 /**
 ========================= 📃
 = Collecting the PAGIES = 📃
@@ -63,7 +62,6 @@ créera une struct `Page` qui sera ensuite réutilisé par Askama pour le rendu 
    pourra m'aider à gérer avec la fonction get_url(), à la condition que le
    parsing des fichiers Markdown ne part pas en vrille à la présence de syntaxe Jinja)
 **/
-pub enum YLMode { Page, Blog }
 pub fn yooka_laylee(mode: YLMode) -> Vec<Page> {
     let mut collection: Vec<Page> = Vec::new();
 
@@ -184,7 +182,6 @@ fn retrieve_frontmatter(source: &str) -> (Option<Frontmatter>, String) {
 pub fn is_potential_opt_file(uri: &str) -> bool { uri.contains(".") && !uri.ends_with(".md") }
 
 // For debug:
-#[allow(dead_code)]
 fn create_dummy_page() -> Page {
     return Page {
         id: String::from("test-page"),
