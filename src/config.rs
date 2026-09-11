@@ -2,9 +2,7 @@ use std::{net::Ipv4Addr, sync::LazyLock};
 use chrono::prelude::*;
 
 pub struct Configuration {
-    // site_name: Option<String>,
     pub running_mode: RunningMode,
-    pub site_addr: &'static str,
     pub listening_ip: Ipv4Addr,
     pub listening_port: u16,
     pub current_base_url: String,
@@ -33,7 +31,7 @@ pub fn init() -> Configuration {
 
     let compile_time: DateTime<Local> = chrono::Local::now();
 
-    return Configuration { running_mode, site_addr, listening_ip, listening_port, current_base_url, compile_time }
+    return Configuration { running_mode, listening_ip, listening_port, current_base_url, compile_time }
 }
 
 pub static BLAIR: LazyLock<Configuration> = LazyLock::new(|| crate::config::init());
