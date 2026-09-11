@@ -1,13 +1,25 @@
-#[allow(dead_code)]
 mod config;
 mod server;
 mod health;
 mod renderer;
 use config::BLAIR;
 
+fn main() -> std::io::Result<()> {
+    let args: Vec<String> = std::env::args().collect();
+    if &args.len() > &1 {
+        match args[1].as_str() {
+            "monitor" => println!("Congratulation!"),
+            "status" => println!("Wow! You're a, \"real\", \"hacker\"! BeWaRe!"),
+            "🥺" => println!("What the fuck is 🥺\nuse your words\nI don't speak bottom"),
+            _ => cli_args(),
+        } Ok(())
+    } else {
+        blair()
+    }
+}
 
 #[actix_web::main]
-async fn main() -> std::io::Result<()> {
+async fn blair() -> std::io::Result<()> {
     println!("\x1b[1m\x1b[33mB-LAIR - The entry point to the Breadcat's Lair\x1b[0m");
 
     #[cfg(debug_assertions)]
@@ -23,7 +35,15 @@ async fn main() -> std::io::Result<()> {
     );
 
     env_logger::init();
-    println!("\x1b[1m\x1b[34mReady! c:\nServing to: \x1b[0m{}\n", &BLAIR.current_base_url);
+    println!("🐱 \x1b[1m\x1b[34mReady!\x1b[0m\n🌐 \x1b[1m{}\x1b[0m\n", &BLAIR.current_base_url);
     crate::server::launch()?.await?;
     Ok(())
+}
+
+fn cli_args() {
+    println!("
+B-LAIR:
+    monitor\t- Open a TUI to have a glimpse of what B-LAIR is doing.
+    status\t- Show the current status of B-LAIR (granted it has been launched).
+")
 }
