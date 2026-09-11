@@ -179,8 +179,6 @@ fn retrieve_frontmatter(source: &str) -> (Option<Frontmatter>, String) {
     }
 }
 
-pub fn is_potential_opt_file(uri: &str) -> bool { uri.contains(".") && !uri.ends_with(".md") }
-
 // For debug:
 fn create_dummy_page() -> Page {
     return Page {

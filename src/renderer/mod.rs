@@ -15,6 +15,8 @@ use actix_web::{
 };
 use askama::Template;
 
+pub fn is_potential_opt_file(uri: &str) -> bool { uri.contains(".") && !uri.ends_with(".md") }
+
 #[macro_export]
 macro_rules! _404Error {
     () => {
@@ -59,7 +61,7 @@ pub async fn root(req: HttpRequest) -> impl Responder {
         }
     } else {
         // Page's static files
-        if pages::is_potential_opt_file(normal_uri) {
+        if is_potential_opt_file(normal_uri) {
             let expected_file = format!("./content/pages/{uri}");
             match actix_files::NamedFile::open(expected_file) {
                 Ok(file) => file.into_response(&req),
@@ -112,7 +114,7 @@ pub async fn blog(req: HttpRequest) -> impl Responder {
 
     // Verifie en premier si la requête porte vers un fichier se trouvant à l'intérieur
     // du dossier dédié à la page et le renvoi le cas échéant
-    if pages::is_potential_opt_file(normal_uri) {
+    if is_potential_opt_file(normal_uri) {
         let expected_file = format!("./content/blog/{}", normal_uri.trim_start_matches("/"));
         match actix_files::NamedFile::open(expected_file) {
             Ok(file) => file.into_response(&req),
