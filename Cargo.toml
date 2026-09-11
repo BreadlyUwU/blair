@@ -13,7 +13,7 @@ edition = "2024"
 [dependencies]
 actix-files = "0.7.0"
 actix-web = "4.15.0"
-askama = { version = "0.16.0", default-features = false, features = ["derive", "std"] }
+askama = { version = "0.16.1", default-features = false, features = ["derive", "std"] }
 markdown = "1.0.0"
 fs-walk = { version = "0.2.2", features = ["regex"] }
 env_logger = "0.11.11"
