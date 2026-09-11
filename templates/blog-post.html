@@ -4,7 +4,6 @@
 		<title>{{ post.frontmatter.title }} - Breadcat's Lair</title>
 		<meta name="description" content="{{ post.frontmatter.description }}" />
 		<meta name="keywords" content="{% if let Some(tags) = post.frontmatter.tags %}{% for tag in tags %}{{ tag | safe }},{% endfor %}{% endif %}" />
-		<link rel="stylesheet" href="{{ get_url("/static/css/blog.css") }}" type="text/css" />
 		<meta property="og:type" content="article" />
 		<meta property="og:title" content="{{ post.frontmatter.title }}">
 		<meta property="og:description" content="{{ post.frontmatter.description | safe }}" />
