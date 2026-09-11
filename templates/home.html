@@ -14,6 +14,36 @@
 				<p>Please come back later!~ ❤️</p>
 			</article>
 		{% endcall %}
+		{% call window::draw(id="content", class="blog-post", title="Latest blog post") %}
+			<style>
+				#content-header { background: url("/blog/{{ blog_last_post.id }}/_thumbnail.gif") center right no-repeat #531515; }
+				@media (prefers-color-scheme: light) {
+					#content-header { background: url("/blog/{{ blog_last_post.id }}/_thumbnail.gif") center right no-repeat #ccd0da; }
+				}
+			</style>
+
+			<div id="content-header">
+				<table id="blog-post-info">
+					<thead>
+						<tr>
+							<th scope="col">Title</th>
+							<th scope="col">Date</th>
+							<th scope="col">Category/Tags</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><span><a href="/blog/{{ blog_last_post.id }}">{{ blog_last_post.frontmatter.title }}</a></span></td>
+							<td>{% if let Some(date) = blog_last_post.date %}<span>{{ date }}</span>{% endif %}</td>
+							<td>{% if let Some(tags) = blog_last_post.frontmatter.tags %}{% for tag in tags %}<span>{{ tag }}</span> {% endfor %}{% endif %}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<article>
+				{{ blog_last_post.content | safe }}
+			</article>
+		{% endcall %}
 	</div>
 	
 	{% if is_debug() == true %}

@@ -29,8 +29,8 @@ macro_rules! _404Error {
 
 #[derive(Template)]
 #[template(path = "home.html")]
-struct HomeTemplate;
-functions::load_BlairStandardFunctions!(HomeTemplate);
+struct HomeTemplate<'a> { blog_last_post: &'a Page }
+functions::load_BlairStandardFunctions!(HomeTemplate<'_>);
 
 #[derive(Template)]
 #[template(path = "page.html")]
@@ -53,9 +53,12 @@ pub async fn root(req: HttpRequest) -> impl Responder {
     let uri = req.match_info().get("uri").unwrap_or("");
     let normal_uri = if uri.ends_with("/") { uri.split_at(uri.len() - 1).0 } else { uri };
     let pages = &PAGE_COLLECTION;
+    let posts = &BLOG_COLLECTION;
     if uri.is_empty() || uri == "/" {
         // Homepage
-        match HomeTemplate.render() {
+        let blog_last_post = &posts[0];
+        let template = HomeTemplate { blog_last_post };
+        return match template.render() {
             Ok(render) => HttpResponse::Ok().content_type("text/html").body(render),
             Err(e) => HttpResponse::InternalServerError().body(crate::renderer::errors::askama_error(e)),
         }
