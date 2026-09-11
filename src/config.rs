@@ -15,10 +15,11 @@ pub enum RunningMode {
 }
 
 pub fn init() -> Configuration {
-    #[cfg(debug_assertions)]
-    let running_mode: RunningMode = RunningMode::Debug;
-    #[cfg(not(debug_assertions))]
-    let running_mode = RunningMode::Production;
+    let running_mode: RunningMode = if cfg!(debug_assertions) {
+        RunningMode::Debug
+    } else {
+        RunningMode::Production
+    };
 
     let site_addr = "https://breadcat.run";
     let listening_ip: Ipv4Addr = Ipv4Addr::new(127,0,0,1);
