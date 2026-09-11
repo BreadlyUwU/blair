@@ -195,13 +195,13 @@ fn create_dummy_page() -> Page {
             ..Default::default()
         },
         content: String::from("<img src='./assets/dreamcat.jpg' style='max-width: 30vw; display: block; float: right;'/>
-<center><audio controls src='./assets/this_is_a_test.opus' autoplay></audio></center>
 <h1>This is a test</h1>
 <h2>This is only a test</h2>
 <h3>Yet another test</h3>
 <h4>I'm not in a hurry…</h4>
 <h5>Yeah one more time baby</h5>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique.</p>
+<center><audio controls src='./assets/this_is_a_test.opus' autoplay></audio></center>
 "),
     }
 }
