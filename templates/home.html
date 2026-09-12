@@ -46,16 +46,17 @@
 		{% endcall %}
 	</div>
 	
-	{% if is_debug() == true %}
 	<div id="sidebar-right">
 		{% call window::draw(id="gts-status", title="Wat") %}
 			<div style="height: 60px; background: left / auto no-repeat url('./static/images/catjam.gif');"></div>
 		{% endcall %}
-		{% call window::draw(id="", title="???", ) %}
+		{% call window::draw(id="???", title="???", ) %}
 			<h1>Oh!</h1>
 			<p>Another one window???</p>
 			<p>No fucking way!</p>
-		{% endcall %}		
+		{% endcall %}
+		{% call window::draw(id="", title="", ) %}
+			<p>The other little windows above will be useful for something later I swear</p>
+		{% endcall %}
 	</div>
-	{% endif %}
 {% endblock content %}
