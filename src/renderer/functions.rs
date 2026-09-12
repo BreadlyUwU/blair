@@ -9,9 +9,9 @@ pub trait BlairStandardFunctions {
 macro_rules! load_BlairStandardFunctions {
     ($($t:ty),+) => {
         $(impl functions::BlairStandardFunctions for $t {
-            // =============
-            // = START! 🔊 =
-            // =============
+            /* =============
+               = START! 🔊 =
+               ============= */
 
             fn get_url(&self, val: &str) -> String {
                 let base_url = &BLAIR.current_base_url;
@@ -34,9 +34,9 @@ macro_rules! load_BlairStandardFunctions {
                 }
             }
 
-            // ==============
-            // = FINISH! 🏁 =
-            // ==============
+            /* ==============
+               = FINISH! 🏁 =
+               ============== */
         })+
     }
 }

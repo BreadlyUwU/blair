@@ -43,25 +43,9 @@ impl Page {
 }
 
 pub enum YLMode { Page, Blog }
-/**
-========================= 📃
-= Collecting the PAGIES = 📃
-========================= 📃
-Si un dossier à l'intérieur de "./content/{pages,blog}" contient
-un fichier nommé "index.md" ALORS ce dernier sera parsé et la fonction
-créera une struct `Page` qui sera ensuite réutilisé par Askama pour le rendu final
-
-À explorer également plus tard:
- *  Faire en sorte que si dans un dossier il y a plusieurs fichiers MD,
-   alors B⋅LAIR devra être capable de les servirs séparément:
-   ex:
-     /quelque-chose/index.md <- https://breadcat.run/quelque-chose
-     /quelque-chose/more.md  <- https://breadcat.run/quelque-chose/more
-   (/quelque-chose/more devra avoir également accès aux mêmes fichiers
-   statiques que /quelque-chose, mais c'est peut-être quelque-chose qu'Askama
-   pourra m'aider à gérer avec la fonction get_url(), à la condition que le
-   parsing des fichiers Markdown ne part pas en vrille à la présence de syntaxe Jinja)
-**/
+/** ========================= 📃
+    = Collecting the PAGIES = 📃
+    ========================= 📃 **/
 pub fn yooka_laylee(mode: YLMode) -> Vec<Page> {
     let mut collection: Vec<Page> = Vec::new();
 

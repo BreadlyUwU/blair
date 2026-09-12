@@ -3,15 +3,13 @@ use actix_web::{App, HttpServer, dev::Server, middleware, web};
 use std::net::TcpListener;
 
 pub fn launch() -> Result<Server, std::io::Error> {
-    // let listener = TcpListener::bind(config::Configuration::get_listener())?;
-    // let listener: Result<TcpListener, std::io::Error> = TcpListener::bind(format!("{}:{}", config.listening_ip, config.listening_port));
     match TcpListener::bind(format!("{}:{}", BLAIR.listening_ip, BLAIR.listening_port)) {
         Ok(listener) => {
             let server = HttpServer::new(move || {
                 App::new()
                     .wrap(middleware::Logger::default())
                     // ATTENTION: Mettre les points d'entrés statiques EN PREMIER
-                    // Sinon ils sont écrasés par les endpoints dynamiques (typiquement "pages" et "blog-posts")
+                    // Sinon ils sont écrasés par les endpoints dynamiques (typiquement "blog" et surtout "root")
 
                     // Service du health-check
                     .service(crate::health::check)
