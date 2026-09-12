@@ -34,7 +34,7 @@
 					<tbody>
 						<tr>
 							<td><span><a href="/blog/{{ blog_last_post.id }}">{{ blog_last_post.frontmatter.title }}</a></span></td>
-							<td>{% if let Some(date) = blog_last_post.date %}<span>{{ date }}</span>{% endif %}</td>
+							<td>{% if let Some(date) = blog_last_post.date %}<span style="white-space: pre;">{{ date }}</span>{% endif %}</td>
 							<td>{% if let Some(tags) = blog_last_post.frontmatter.tags %}{% for tag in tags %}<span>{{ tag }}</span> {% endfor %}{% endif %}</td>
 						</tr>
 					</tbody>

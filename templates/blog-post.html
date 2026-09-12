@@ -11,7 +11,7 @@
 		<meta property="og:image" content="" />
 	</head>
 	<div id="content-box">
-		{% call window::draw(id="content", back=true, title=post.frontmatter.title) %}
+		{% call window::draw(id="content", class="blog-post", back=true, title=post.frontmatter.title) %}
 			<style>
 				#content-header { background: url("_thumbnail.gif") center right no-repeat #531515; }
 				@media (prefers-color-scheme: light) {
@@ -30,7 +30,7 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td>{% if let Some(date) = post.date %}<span>{{ date }}</span>{% endif %}</td>
+							<td>{% if let Some(date) = post.date %}<span style="white-space: pre;">{{ date }}</span>{% endif %}</td>
 							<td>{% if let Some(tags) = post.frontmatter.tags %}{% for tag in tags %}<span>{{ tag }}</span> {% endfor %}{% endif %}</td>
 						</tr>
 					</tbody>
