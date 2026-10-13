@@ -152,8 +152,8 @@ pub async fn blog(req: HttpRequest) -> impl Responder {
 pub async fn favicon(req: HttpRequest) -> actix_web::Result<actix_files::NamedFile> {
     let ext = req.match_info().get("ext").unwrap_or("");
     match ext {
-        ".ico" => Ok(actix_files::NamedFile::open("./static/favicon.ico")?),
-        ".png" => Ok(actix_files::NamedFile::open("./static/favicon.png")?),
+        ".ico" => Ok(actix_files::NamedFile::open("./content/static/favicon.ico")?),
+        ".png" => Ok(actix_files::NamedFile::open("./content/static/favicon.png")?),
         _ => Err(ErrorNotFound(errors::bad_favicon(req)))
     }
 }
