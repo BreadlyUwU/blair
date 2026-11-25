@@ -17,7 +17,7 @@ pub async fn serve() -> HttpResponse {
         Some(fedi) => {
             match check(&fedi.health_endpoint).await {
                 true => HttpResponse::Ok().content_type("application/json").body(r#"{"ok":"instance online"}"#),
-                false => HttpResponse::ServiceUnavailable().append_header(("Retry-After", "300")).content_type("application/json").body(r#"{"error":"instance offline"}"#),
+                false => HttpResponse::ServiceUnavailable().append_header(("Retry-After", "300")).content_type("application/json").body(r#"{"ok":"instance offline"}"#),
             }
         },
         None => HttpResponse::InternalServerError().content_type("application/json").body(r#"{"error":"no instance set in B⋅LAIR's configuration"}"#),
@@ -38,9 +38,23 @@ async fn check(url: &String) -> bool {
 }
 
 async fn ping(url: &String) -> bool {
-    let online = match reqwest::get(url).await {
-        Ok(res) => res.status() == reqwest::StatusCode::OK,
-        Err(_)  => false,
+    let online = match reqwest::Client::new()
+        .get(url)
+        .header(
+            reqwest::header::USER_AGENT,
+            concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION")),
+        )
+        .send()
+        .await
+    {
+        Ok(res) => match res.status() {
+            reqwest::StatusCode::OK => true,
+            _                       => false,
+        },
+        Err(e)  => {
+            log::warn!("{e}");
+            false
+        },
     };
 
     update_cache(online);
