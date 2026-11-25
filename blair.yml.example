@@ -1,0 +1,9 @@
+website_name: Breadcat's Lair
+base_url: https://breadcat.run
+listening_ip: 127.0.0.1
+listening_port: 8064
+extra:
+  fediverse:
+    name: GoToSocial
+    url: https://gts.breadcat.run/@aleenn
+    health_endpoint: http://127.0.0.1:8096/readyz
