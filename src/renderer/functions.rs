@@ -1,4 +1,5 @@
 pub trait BlairStandardFunctions {
+    fn get_site_name(&self) -> &String;
     fn get_url(&self, val: &str) -> String;
     fn get_version(&self) -> String;
     fn get_compile_time(&self) -> String;
@@ -12,6 +13,11 @@ macro_rules! load_BlairStandardFunctions {
             /* =============
                = START! 🔊 =
                ============= */
+
+            fn get_site_name(&self) -> &String {
+                let name = &BLAIR.website_name;
+                return name;
+            }
 
             fn get_url(&self, val: &str) -> String {
                 let base_url = &BLAIR.current_base_url;
