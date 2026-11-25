@@ -32,8 +32,8 @@ async fn check(url: &String) -> bool {
     match read_cache() {
         STATUS::Online(t) | STATUS::Offline(t)
             if Local::now() - t < CACHE_TTL
-            => matches!(read_cache(), STATUS::Online(..)),
-        _ => ping(url).await,
+                => matches!(read_cache(), STATUS::Online(..)),
+        _       => ping(url).await,
     }
 }
 
@@ -51,19 +51,14 @@ async fn ping(url: &String) -> bool {
             reqwest::StatusCode::OK => true,
             _                       => false,
         },
-        Err(e)  => {
-            log::warn!("{e}");
-            false
-        },
+        Err(e)  => { log::warn!("{e}"); false },
     };
 
     update_cache(online);
     online
 }
 
-fn read_cache() -> STATUS {
-    *CACHE_STATUS.read().unwrap()
-}
+fn read_cache() -> STATUS { *CACHE_STATUS.read().unwrap() }
 
 fn update_cache(new_status: bool) {
     let mut lock = CACHE_STATUS.write().unwrap();
