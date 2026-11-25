@@ -24,6 +24,9 @@ pub fn launch() -> Result<Server, std::io::Error> {
                             .use_last_modified(true),
                     )
 
+                    // Service de l'API
+                    .service(crate::api::responder)
+
                     // Service du flux Atom du blog
                     .service(crate::renderer::atom::feed)
 

@@ -1,7 +1,8 @@
 mod config;
 mod server;
-mod health;
 mod renderer;
+mod api;
+mod health;
 use config::BLAIR;
 
 fn main() -> std::io::Result<()> {
