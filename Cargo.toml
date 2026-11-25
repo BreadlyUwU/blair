@@ -12,18 +12,19 @@ license-file = "LICENSE.txt"
 # panic = "abort"
 
 [dependencies]
-actix-files = "0.7.0"
-actix-web = "4.15.0"
+actix-files = "0.7.5"
+actix-web = "4.20.0"
 askama = { version = "0.16.1", default-features = false, features = ["derive", "std"] }
 markdown = "1.0.0"
-fs-walk = { version = "0.2.2", features = ["regex"] }
-env_logger = "0.11.11"
-log = "0.4.34"
+fs-walk = { version = "0.3.0", features = ["regex"] }
+env_logger = "0.11.12"
+log = "0.4.35"
 serde = { version = "1.0.229", features = ["derive"] }
 yaml_serde = "0.10.7"
 chrono = "0.4.45"
 atom_syndication = "0.12.10"
 rayon = "1.12.0"
+reqwest = { version = "0.13", features = ["json"] }
 
 [profile.dev]
 debug = "line-tables-only"
