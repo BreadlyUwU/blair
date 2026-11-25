@@ -86,10 +86,6 @@ Everything inside the `Page` struct is accessible from the Askama template: <br/
 
 Because I ditched Zola as my static site generator when it started to heavily rely on LLM-written code, I didn't want to wait and see how long it would take for the project to really start to stink.
 
-With LLM you cannot script how the shit goes down. So it was an excellent excuse to start a project to help me learning programmation, and it was really worth it.
+It was an excellent excuse to start a project to help me learning programmation, and it was really worth it.
 
 Learning and having fun doing it is the point of this project, nothing more and nothing less.
-
-## A little warning if you plan to fork B⋅LAIR for yourself
-
-There's no **proper** configuration handler yet, the site's URL and listening IP/Port are currently hardcoded inside `config.rs`.<br/>
