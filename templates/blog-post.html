@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 	<head>
-		<title>{{ post.frontmatter.title }} - Breadcat's Lair</title>
+		<title>{{ post.frontmatter.title }} - {{ get_site_name() }}</title>
 		<meta name="description" content="{{ post.frontmatter.description }}" />
 		<meta name="keywords" content="{% if let Some(tags) = post.frontmatter.tags %}{% for tag in tags %}{{ tag | safe }},{% endfor %}{% endif %}" />
 		<meta property="og:type" content="article" />
