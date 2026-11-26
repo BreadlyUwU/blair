@@ -1,4 +1,12 @@
 {% extends "base.html" %}
+{% block skibidi %}
+    {% call window::draw(id="content", title="🐱") %}
+        <center>
+            <span style="font-size: 2em; line-height: 1.5em; margin: 0 5px;">Welcome!</span><br/>
+            <span style="font-size: 4em;">🐱</span>
+       </center>
+   {% endcall %}
+{% endblock skibidi %}
 {% block content %}
 	<head>
 		<title>{{ get_site_name() }}</title>
