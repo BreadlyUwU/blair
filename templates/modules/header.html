@@ -8,7 +8,9 @@
 		<span style="white-space: nowrap;">{{ get_site_name() }}</span>
 	</div>
 	<div id="header_r">
-		<a href="https://gts.breadcat.run/@aleenn" rel="me"><div id="icon-fedi" alt="Fediverse" title="Fediverse"></div></a>
+	    {% if let Some(fediverse) = config.extra.fediverse %}
+			<a href="{{ fediverse.url }}" rel="me"><div id="icon-fedi" alt="Fediverse" title="Fediverse ({{ fediverse.name }})"></div></a>
+		{% endif %}
 		<a href="https://bsky.app/profile/breadcat.run" rel="me"><div id="icon-bluesky" alt="Bluesky" title="Bluesky"></div></a>
 		<a href='{{ get_url("/atom.xml") }}''><div id="icon-atom" alt="Atom Feed" title="Atom Feed"></div></a>
 	</div>
