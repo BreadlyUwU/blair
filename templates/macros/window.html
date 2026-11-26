@@ -2,15 +2,20 @@
     id="",
     class="",
     style="",
-    back = false, 
-    title = "-3-", 
-    beat = false
+    back = false,
+    title = "-3-",
+    title_id="",
+    title_link="",
 ) -%}
-    <div class='window {% if class!= "" %}{{class}}{% endif %}' id='{{id}}' {% if style != "" %}style='{{style}}'{% endif %}>
+    <div class='window{% if class!= "" %} {{class}}{% endif %}' id='{{id}}' {% if style != "" %}style='{{style}}'{% endif %}>
         <div class="w-titlebar">
             <div class="w-left">
                 {% if back == true %}<a href="javascript:window.history.back();"><div class="w-btn arrow" title="Back"></div></a>{% endif %}
-                <div class="w-title" {% if beat == true %}id="internet-time"{% endif %} ><span>{{title}}</span></div>
+                {% if title_link != "" %}
+                    <div class="w-title" {% if title_id != "" %}id="{{title_id}}"{% endif %} ><span><a href="{{ title_link }}">{{title}}</a></span></div>
+                {% else %}
+                    <div class="w-title" {% if title_id != "" %}id="{{title_id}}"{% endif %} ><span>{{title}}</span></div>
+                {% endif %}
             </div>
             <div class="w-right">
                 <div class="w-btn minimize"></div>
