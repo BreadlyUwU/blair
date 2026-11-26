@@ -30,41 +30,12 @@
 				}
 			</style>
 
-			<div id="content-header">
-				<table id="blog-post-info">
-					<thead>
-						<tr>
-							<th scope="col">Title</th>
-							<th scope="col">Date</th>
-							<th scope="col">Category/Tags</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><span><a href="/blog/{{ blog_last_post.id }}">{{ blog_last_post.frontmatter.title }}</a></span></td>
-							<td>{% if let Some(date) = blog_last_post.date %}<span style="white-space: pre;">{{ date }}</span>{% endif %}</td>
-							<td>{% if let Some(tags) = blog_last_post.frontmatter.tags %}{% for tag in tags %}<span>{{ tag }}</span> {% endfor %}{% endif %}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<article>
-				{{ blog_last_post.content | safe }}
-			</article>
-		{% endcall %}
-	</div>
-
-	<div id="sidebar-right">
-		{% call window::draw(id="gts-status", title="Wat") %}
-			<div style="height: 60px; background: left / auto no-repeat url('./static/images/catjam.gif');"></div>
-		{% endcall %}
-		{% call window::draw(id="???", title="???", ) %}
-			<h1>Oh!</h1>
-			<p>Another one window???</p>
-			<p>No fucking way!</p>
-		{% endcall %}
-		{% call window::draw(id="", title="", ) %}
-			<p>The other little windows above will be useful for something later I swear</p>
-		{% endcall %}
-	</div>
+   	<div id="sidebar-right" style="display:none;">
+       	{% if let Some(fediverse) = config.extra.fediverse %}
+            {% call window::draw(id="gts-status", title=fediverse.name, style="display:none;") %}
+                {# <a href="{{ fediverse.url }}" rel="me"><div style="height: 60px; background: left / auto no-repeat url('./static/images/catjam.gif');"></div></a> #}
+                <a href="{{ fediverse.url }}" rel="me"><div style="height: 60px;"></div></a>
+            {% endcall %}
+       	{% endif %}
+   	</div>
 {% endblock content %}
