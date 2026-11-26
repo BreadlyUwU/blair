@@ -12,23 +12,50 @@
 		<title>{{ get_site_name() }}</title>
 		<meta name="description" content="UwU~" />
 	</head>
-	<div id="content-box-wide">
-		{% call window::draw(id="content", title="B:\\") %}
-			<article>
-				<h1>Oh, ooooh!</h1>
-				<h3>Welcome!</h3>
-				<p>This is my website!</p>
-				<p>But it is currently under a very… <b>very…</b> huge rework.</p>
-				<p>Please come back later!~ ❤️</p>
-			</article>
-		{% endcall %}
-		{% call window::draw(id="content", class="blog-post", title="Latest blog post") %}
-			<style>
-				#content-header { background: url("/blog/{{ blog_last_post.id }}/_thumbnail.gif") center right no-repeat #531515; }
-				@media (prefers-color-scheme: light) {
-					#content-header { background: url("/blog/{{ blog_last_post.id }}/_thumbnail.gif") center right no-repeat #ccd0da; }
-				}
-			</style>
+   	<div id="content-box-wide">
+  		{% call window::draw(id="content", title="B:\\") %}
+            <article>
+                <div style="display: block; float: left; margin-right: 5px; margin-bottom: 2px;">
+                    {% block skibidi %}
+                    {% endblock skibidi %}
+                </div>
+                <h3 style="margin-top: 0;">I'm Aleenn, and this is my website!</h3>
+                <p>But it is currently under a very… <b>very…</b> huge rework.</p>
+                <p>Please come back later~!</p>
+                <span>eeeee</span><br/>
+                <span>eeeee</span><br/>
+                <span>eeeee</span><br/>
+                <span>eeeee</span><br/>
+                <div style="display: block; float: right; margin-left: 5px; margin-bottom: 2px;">
+                    {% block skibidi %}
+                    {% endblock skibidi %}
+                </div>
+                <span>eeeee</span><br/>
+                <span>eeeee</span><br/>
+                <span>eeeee</span><br/>
+                <span>eeeee</span><br/>
+                <span>eeeee</span><br/>
+                <span>eeeee</span><br/>
+				<p style="font-variant-emoji: text;">~ &#x2764;&#xFE0E;</p>
+ 			</article>
+  		{% endcall %}
+  		{% call window::draw(
+  		    id="content",
+ 			class="blog-post",
+ 			title="Latest post: " ~ blog_last_post.frontmatter.title,
+ 			title_link="{}"|format("/blog/" ~ blog_last_post.id)
+  		) %}
+ 			<article>
+                {% set post_length = blog_last_post.content.chars().count() %}
+                {% if post_length > 800 %}
+                    {{ blog_last_post.content | truncate(800) | safe }}
+                    <p><a href="/blog/{{ blog_last_post.id }}">🐱 Read more</a></p>
+                {% else %}
+                    {{ blog_last_post.content | safe }}
+                {% endif %}
+ 			</article>
+  		{% endcall %}
+   	</div>
 
    	<div id="sidebar-right" style="display:none;">
        	{% if let Some(fediverse) = config.extra.fediverse %}
