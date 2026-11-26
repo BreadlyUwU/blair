@@ -29,7 +29,7 @@ pub struct ConfigurationExtra {
     pub fediverse: Option<Fediverse>
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 pub struct Fediverse {
     pub name: String,
     pub url: String,
